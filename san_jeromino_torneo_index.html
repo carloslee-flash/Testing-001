@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liga de Softball San Jerónimo - Torneo Chata #37</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos personalizados para el degradado deportivo */
+        .bg-sports {
+            background: linear-gradient(135deg, #1e3a8a 0%, #111827 100%); /* Azul fuerte a negro */
+        }
+        .text-accent {
+            color: #fbbf24; /* Amarillo ámbar para resaltar */
+        }
+        .border-accent {
+            border-color: #fbbf24;
+        }
+        .bg-accent {
+            background-color: #fbbf24;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans text-gray-900">
+
+    <header class="bg-sports text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="softball" width="100" height="100" patternUnits="userSpaceOnUse">
+                        <circle cx="50" cy="50" r="40" stroke="white" stroke-width="2" fill="none"/>
+                        <path d="M10,50 Q50,10 90,50 M10,50 Q50,90 90,50" stroke="white" stroke-width="2" fill="none"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#softball)" />
+            </svg>
+        </div>
+
+        <nav class="container mx-auto p-5 flex justify-between items-center relative z-10">
+            <div class="flex items-center gap-3">
+                <div class="bg-white p-2 rounded-full w-16 h-16 flex items-center justify-center border-4 border-accent shadow-lg overflow-hidden">
+                    <img src="placeholder-logo.png" alt="Logo Liga San Jerónimo" class="max-w-full">
+                </div>
+                <h1 class="text-3xl font-extrabold tracking-tight">LIGA SAN JERÓNIMO</h1>
+            </div>
+            <a href="https://www.instagram.com/ligasoftballsanjeronimo/" target="_blank" class="bg-accent text-gray-900 px-6 py-2 rounded-full font-bold hover:bg-yellow-500 transition shadow-md">
+                Ver Instagram
+            </a>
+        </nav>
+
+        <div class="container mx-auto px-5 py-24 text-center relative z-10">
+            <span class="inline-block bg-accent text-gray-900 px-4 py-1 rounded-full font-bold text-sm mb-4 shadow-md">TEMPORADA 2026</span>
+            <h2 class="text-6xl md:text-7xl font-black mb-6 leading-tight tracking-tighter">
+                ¡El <span class="text-accent">Play</span> Está <br>Listo!
+            </h2>
+            <p class="text-2xl md:text-3xl font-light mb-12 max-w-3xl mx-auto text-gray-200">
+                Acompáñanos en el emocionante inicio del <strong class="font-bold text-white">TORNEO INTERNO CHATA #37</strong> de la Liga de Softball de San Jerónimo.
+            </p>
+            <div class="flex gap-4 justify-center">
+                <a href="#detalles" class="bg-white text-blue-900 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-200 transition shadow-xl">
+                    Detalles del Evento
+                </a>
+                <a href="#equipos" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/10 transition">
+                    Ver Equipos
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section id="detalles" class="py-20 bg-white">
+        <div class="container mx-auto px-5 grid md:grid-cols-2 gap-12 items-center">
+            <div>
+                <h3 class="text-4xl font-bold mb-6 text-gray-900">
+                    <span class="text-blue-700">Inauguración Oficial:</span> <br>Un Evento para la Familia
+                </h3>
+                <p class="text-lg text-gray-700 mb-8 leading-relaxed">
+                    Ven a presenciar el lanzamiento de la primera bola y el desfile inaugural de nuestro trigésimo séptimo torneo interno. Será una tarde llena de emoción, espíritu deportivo y comunidad en San Jerónimo. ¡No te pierdas el inicio de la acción Chata!
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 bg-gray-100 p-4 rounded-lg border-l-4 border-blue-600 shadow">
+                        <span class="text-4xl">📅</span>
+                        <div>
+                            <h4 class="font-bold text-xl">Fecha</h4>
+                            <p class="text-gray-700">[Insertar Fecha, ej: Sábado, 15 de Marzo, 2026]</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-gray-100 p-4 rounded-lg border-l-4 border-blue-600 shadow">
+                        <span class="text-4xl">🕒</span>
+                        <div>
+                            <h4 class="font-bold text-xl">Hora</h4>
+                            <p class="text-gray-700">[Insertar Hora, ej: 4:00 PM]</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-gray-100 p-4 rounded-lg border-l-4 border-blue-600 shadow">
+                        <span class="text-4xl">📍</span>
+                        <div>
+                            <h4 class="font-bold text-xl">Lugar</h4>
+                            <p class="text-gray-700">[Insertar Estadio/Play, ej: Play de la Liga de San Jerónimo]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+                <img src="placeholder-inauguracion.jpg" alt="Estadio de Softball preparado para el torneo" class="w-full h-full object-cover aspect-video">
+                <p class="bg-gray-800 text-white p-3 text-center text-sm font-medium">© @ligasoftballsanjeronimo</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-5">
+            <h3 class="text-4xl font-bold mb-12 text-center text-gray-900">Momentos de la <span class="text-blue-700">Liga San Jerónimo</span></h3>
+            <p class="text-center text-gray-600 mb-12 max-w-xl mx-auto">Imágenes tomadas de nuestra comunidad en @ligasoftballsanjeronimo. ¡Pasión Chata!</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="rounded-lg overflow-hidden shadow-lg aspect-square bg-gray-200 border-2 border-gray-300">
+                    <img src="placeholder-gallery-1.jpg" alt="Jugador Chata bateando" class="w-full h-full object-cover transition-transform hover:scale-110">
+                </div>
+                <div class="rounded-lg overflow-hidden shadow-lg aspect-square bg-gray-200 border-2 border-gray-300">
+                    <img src="placeholder-gallery-2.jpg" alt="Equipo celebrando victoria" class="w-full h-full object-cover transition-transform hover:scale-110">
+                </div>
+                <div class="rounded-lg overflow-hidden shadow-lg aspect-square bg-gray-200 border-2 border-gray-300">
+                    <img src="placeholder-gallery-3.jpg" alt="Pítcher lanzando bola chata" class="w-full h-full object-cover transition-transform hover:scale-110">
+                </div>
+                <div class="rounded-lg overflow-hidden shadow-lg aspect-square bg-gray-200 border-2 border-gray-300">
+                    <img src="placeholder-gallery-4.jpg" alt="Familia disfrutando del juego" class="w-full h-full object-cover transition-transform hover:scale-110">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="equipos" class="py-20 bg-sports text-white">
+        <div class="container mx-auto px-5 text-center">
+            <h3 class="text-4xl font-bold mb-12">Los Contendientes del <span class="text-accent">Chata #37</span></h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-xl transform transition hover:-translate-y-2">
+                    <div class="w-20 h-20 bg-blue-900 rounded-full mx-auto mb-4 border-4 border-accent flex items-center justify-center font-black text-3xl text-accent">E1</div>
+                    <h4 class="text-xl font-bold">[Nombre Equipo 1]</h4>
+                    <p class="text-gray-400 text-sm">Contendiente Chata 2026</p>
+                </div>
+                 <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-xl transform transition hover:-translate-y-2">
+                    <div class="w-20 h-20 bg-blue-900 rounded-full mx-auto mb-4 border-4 border-accent flex items-center justify-center font-black text-3xl text-accent">E2</div>
+                    <h4 class="text-xl font-bold">[Nombre Equipo 2]</h4>
+                    <p class="text-gray-400 text-sm">Contendiente Chata 2026</p>
+                </div>
+                 <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-xl transform transition hover:-translate-y-2">
+                    <div class="w-20 h-20 bg-blue-900 rounded-full mx-auto mb-4 border-4 border-accent flex items-center justify-center font-black text-3xl text-accent">E3</div>
+                    <h4 class="text-xl font-bold">[Nombre Equipo 3]</h4>
+                    <p class="text-gray-400 text-sm">Contendiente Chata 2026</p>
+                </div>
+                 <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-xl transform transition hover:-translate-y-2">
+                    <div class="w-20 h-20 bg-blue-900 rounded-full mx-auto mb-4 border-4 border-accent flex items-center justify-center font-black text-3xl text-accent">E4</div>
+                    <h4 class="text-xl font-bold">[Nombre Equipo 4]</h4>
+                    <p class="text-gray-400 text-sm">Contendiente Chata 2026</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="container mx-auto px-5 text-center">
+            <p class="text-sm mb-4">Patrocinado por la Directiva de la Liga de Softball San Jerónimo</p>
+            <p class="font-bold text-lg mb-6">Síguenos para resultados y fotos:</p>
+            <a href="https://www.instagram.com/ligasoftballsanjeronimo/" target="_blank" class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white px-8 py-3 rounded-lg font-bold hover:opacity-90 transition shadow-lg">
+                <svg class="w-6 h-6 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.9c-41.4 0-75-33.6-75-75s33.6-75 75-75 75 33.6 75 75-33.6 75-75 75zm146.1-194c-14.9 0-26.8 11.9-26.8 26.8s11.9 26.8 26.8 26.8 26.8-11.9 26.8-26.8-11.9-26.8-26.8-26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.8 9.9 67.6 36.1 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.9 0-184.9zm-37.1 230.7c-7.8 19.6-22.9 34.7-42.4 42.4-29.4 11.7-99.4 9-132.1 9s-102.7 2.6-132.1-9c-19.5-7.8-34.6-22.9-42.4-42.4-11.7-29.4-9-99.4-9-132.1s-2.6-102.7 9-132.1c7.8-19.5 22.9-34.6 42.4-42.4 29.4-11.7 99.4-9 132.1-9s102.7-2.6 132.1 9c19.5 7.8 34.6 22.9 42.4 42.4 11.7 29.4 9 99.4 9 132.1s2.7 102.7-9 132.1z"/></svg>
+                @ligasoftballsanjeronimo
+            </a>
+            <p class="mt-12 text-xs text-gray-500">&copy; 2026 Liga de Softball San Jerónimo. Santo Domingo, R.D.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
