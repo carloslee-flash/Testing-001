@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carlos Te Premia | Sorteos y Rifas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <nav class="bg-blue-600 p-4 text-white shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold italic">CARLOS TE PREMIA</h1>
+            <ul class="flex space-x-4">
+                <li><a href="#" class="hover:underline">Inicio</a></li>
+                <li><a href="#" class="hover:underline">Mis Boletos</a></li>
+                <li><a href="#" class="hover:underline">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="bg-white py-10 shadow-sm">
+        <div class="container mx-auto text-center px-4">
+            <h2 class="text-4xl font-extrabold text-gray-800 mb-4">¡Gánate una Toyota Hilux 2024!</h2>
+            <p class="text-gray-600 mb-6">Participa y cumple tus sueños con Carlos Te Premia.</p>
+            <img src="https://visionmotors.com.ar/wp-content/uploads/2024/11/image-1110x577.png" alt="Premio" class="mx-auto rounded-lg shadow-2xl mb-8 max-w-full h-auto">
+        </div>
+    </header>
+
+    <section class="container mx-auto py-12 px-4">
+        <div class="bg-white p-8 rounded-xl shadow-md max-w-4xl mx-auto">
+            <h3 class="text-2xl font-bold mb-6 text-center">Selecciona la cantidad de boletos</h3>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <button class="border-2 border-blue-500 p-4 rounded-lg hover:bg-blue-50 transition">
+                    <span class="block text-xl font-bold">1 Boleto</span>
+                    <span class="text-gray-500">$10 USD</span>
+                </button>
+                <button class="border-2 border-blue-500 p-4 rounded-lg hover:bg-blue-50 transition">
+                    <span class="block text-xl font-bold">5 Boletos</span>
+                    <span class="text-gray-500">$45 USD</span>
+                </button>
+                <button class="border-2 border-blue-500 p-4 rounded-lg bg-blue-600 text-white">
+                    <span class="block text-xl font-bold">10 Boletos</span>
+                    <span class="text-gray-500 text-blue-100">$80 USD</span>
+                </button>
+                <button class="border-2 border-blue-500 p-4 rounded-lg hover:bg-blue-50 transition">
+                    <span class="block text-xl font-bold">20 Boletos</span>
+                    <span class="text-gray-500">$150 USD</span>
+                </button>
+            </div>
+
+            <form id="payment-form" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" placeholder="Nombre Completo" class="w-full p-3 border rounded-md outline-blue-500" required>
+                    <input type="email" placeholder="Correo Electrónico" class="w-full p-3 border rounded-md outline-blue-500" required>
+                </div>
+                <input type="tel" placeholder="WhatsApp (Ej: +52...)" class="w-full p-3 border rounded-md outline-blue-500" required>
+                
+                <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-lg text-xl shadow-lg transition transform hover:scale-105">
+                    PAGAR Y PARTICIPAR AHORA
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-white py-6 mt-10">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Carlos Te Premia. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
