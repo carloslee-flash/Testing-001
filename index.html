@@ -17,7 +17,7 @@
     <header class="bg-league text-white py-8 shadow-xl">
         <div class="container mx-auto px-4 text-center">
             <h1 class="text-3xl font-black uppercase tracking-wider">Liga San Jerónimo</h1>
-            <p class="accent font-bold mt-1 uppercase text-sm italic text-shadow-sm">Panel Oficial de Estadísticas 2026</p>
+            <p class="accent font-bold mt-1 uppercase text-sm italic">Panel Oficial de Estadísticas 2026</p>
         </div>
     </header>
 
@@ -91,10 +91,11 @@
             const eq = document.getElementById('filtroEq').value;
             const busq = document.getElementById('buscador').value.toLowerCase();
             
+            // Standings
             document.getElementById('tabla-standing').innerHTML = db.standing.map(s => `
                 <tr class="hover:bg-slate-50 border-b">
                     <td class="p-3 text-blue-800 font-black italic text-base">${s.equipo}</td>
-                    <td>${s.jj}</td><td class="text-green-600">${s.jg}</td><td class="text-red-600">${s.jp}</td>
+                    <td>${s.jj}</td><td class="text-green-600">${s.jg}</td><td class="text-red-700">${s.jp}</td>
                     <td>${s.je}</td><td class="text-base font-black text-blue-900">${s.pts}</td>
                     <td class="italic">${s.avg.toFixed(3)}</td>
                 </tr>`).join('');
@@ -112,14 +113,13 @@
 
         function renderLideresBateo() {
             const cats = [
-                {n:'Batting Average', k:'avg', d:3},
-                {n:'Home Runs', k:'hr', d:0},
-                {n:'Hits Totales', k:'hits', d:0},
-                {n:'Dobles (2B)', k:'b2', d:0},
+                {n:'Promedio (AVG)', k:'avg', d:3},
+                {n:'Home Runs (HR)', k:'hr', d:0},
+                {n:'Hits Totales (H)', k:'hits', d:0},
                 {n:'Triples (3B)', k:'b3', d:0},
-                {n:'Anotadas', k:'runs', d:0},
-                {n:'Bases por Bolas', k:'bb', d:0},
-                {n:'Impulsadas', k:'rbi', d:0}
+                {n:'Bases Robadas (SB)', k:'sb', d:0}, // <-- NUEVA CATEGORÍA AGREGADA
+                {n:'Impulsadas (RBI)', k:'rbi', d:0},
+                {n:'Anotadas', k:'runs', d:0}
             ];
             generarCards(cats, db.jugadores);
         }
@@ -136,7 +136,7 @@
         function generarCards(cats, pool) {
             document.getElementById('lideratos').innerHTML = cats.map(cat => {
                 const tops = [...pool]
-                    .filter(j => j[cat.k] > 0 || cat.rev) // Solo mostrar si tienen estadísticas positivas
+                    .filter(j => j[cat.k] !== undefined)
                     .sort((a,b) => cat.rev ? a[cat.k] - b[cat.k] : b[cat.k] - a[cat.k])
                     .slice(0, 10);
 
@@ -158,24 +158,25 @@
                     <th class="p-3">Jugador</th><th>Eq</th><th>VB</th><th>TO</th>
                     <th class="text-blue-300">AVG</th><th class="text-blue-300">SLG</th>
                     <th class="bg-blue-700">H</th><th>1B</th><th>2B</th><th>3B</th><th class="bg-blue-700">HR</th>
-                    <th>SB</th><th>BB</th><th>SO</th><th>Runs</th><th>RBI</th>
+                    <th class="text-yellow-500 font-bold">SB</th><th>BB</th><th>SO</th><th>Runs</th><th>RBI</th>
                     <th class="text-orange-300">wOBA</th><th class="text-orange-300">wRAA</th>
                 </tr>`;
             
             document.getElementById('body-tabla').innerHTML = l.map(j => `
-                <tr class="hover:bg-blue-50 border-b">
+                <tr class="hover:bg-blue-50 border-b font-medium text-slate-600">
                     <td class="p-3 font-bold text-slate-900">${j.nombre}</td>
-                    <td class="font-bold text-center">${j.equipo}</td>
+                    <td class="text-center">${j.equipo}</td>
                     <td>${j.vb}</td><td>${j.to}</td>
                     <td class="font-black text-blue-700">${j.avg.toFixed(3)}</td>
-                    <td>${j.slg.toFixed(3)}</td>
+                    <td>${(j.slg || 0).toFixed(3)}</td>
                     <td class="font-bold bg-slate-50">${j.hits}</td>
-                    <td>${j.b1}</td><td>${j.b2}</td><td>${j.b3}</td>
+                    <td>${j.b1 || 0}</td><td>${j.b2 || 0}</td><td>${j.b3 || 0}</td>
                     <td class="font-black bg-slate-50 text-red-700 text-center">${j.hr}</td>
-                    <td>${j.sb}</td><td>${j.bb}</td><td>${j.so}</td>
-                    <td class="font-bold">${j.runs}</td><td class="font-bold">${j.rbi}</td>
-                    <td class="font-bold text-green-700">${j.woba.toFixed(3)}</td>
-                    <td class="text-slate-400">${j.wraa.toFixed(1)}</td>
+                    <td class="font-black text-blue-800">${j.sb || 0}</td>
+                    <td>${j.bb || 0}</td><td>${j.so || 0}</td>
+                    <td class="font-bold">${j.runs || 0}</td><td class="font-bold">${j.rbi || 0}</td>
+                    <td class="font-bold text-green-700">${(j.woba || 0).toFixed(3)}</td>
+                    <td class="text-slate-400">${(j.wraa || 0).toFixed(1)}</td>
                 </tr>`).join('');
         }
 
@@ -188,14 +189,14 @@
                 </tr>`;
             
             document.getElementById('body-tabla').innerHTML = l.map(p => `
-                <tr class="hover:bg-red-50 border-b">
+                <tr class="hover:bg-red-50 border-b font-medium text-slate-600">
                     <td class="p-3 font-bold text-slate-900">${p.nombre}</td>
-                    <td class="font-bold text-center">${p.equipo}</td>
+                    <td class="text-center">${p.equipo}</td>
                     <td class="font-black text-blue-700">${p.era.toFixed(2)}</td>
                     <td class="text-green-700 font-bold text-center">${p.g}</td>
                     <td>${p.ip}</td>
                     <td class="font-black text-red-700 bg-slate-50 text-center">${p.k}</td>
-                    <td>${p.whip.toFixed(2)}</td>
+                    <td>${(p.whip || 0).toFixed(2)}</td>
                     <td>${p.bb}</td><td>${p.er}</td>
                 </tr>`).join('');
         }
