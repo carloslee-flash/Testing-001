@@ -9,45 +9,57 @@
         .bg-league { background: linear-gradient(135deg, #1e3a8a 0%, #111827 100%); }
         .accent { color: #fbbf24; }
         .tab-active { border-bottom: 4px solid #fbbf24; color: #fbbf24; }
-        .table-container { overflow-x: auto; }
+        .table-container { overflow-x: auto; scrollbar-width: thin; }
     </style>
 </head>
 <body class="bg-gray-50 font-sans text-slate-900">
 
-    <header class="bg-league text-white py-8 shadow-xl text-center">
-        <h1 class="text-3xl font-black uppercase tracking-wider italic">Liga San Jerónimo</h1>
-        <p class="accent font-bold mt-1 uppercase text-sm italic">Estadísticas 2026 (Números Enteros)</p>
+    <header class="bg-league text-white py-8 shadow-xl">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-3xl font-black uppercase tracking-wider italic">Liga San Jerónimo</h1>
+            <p class="accent font-bold mt-1 uppercase text-sm italic tracking-widest">Panel de Líderes y Estadísticas 2026</p>
+        </div>
     </header>
 
     <main class="container mx-auto px-4 py-8">
+        
         <div class="mb-10 bg-white rounded-xl shadow-md border overflow-hidden">
+            <div class="bg-slate-800 text-white p-2 font-bold text-center uppercase tracking-widest text-[10px]">Posiciones Serie Regular</div>
             <div class="table-container">
                 <table class="w-full text-center text-sm">
                     <thead class="bg-gray-100 text-gray-600 uppercase text-[11px]">
-                        <tr><th>Eq</th><th>JJ</th><th>JG</th><th>JP</th><th>JE</th><th>PTS</th><th class="italic">AVG</th></tr>
+                        <tr><th class="p-3">Eq</th><th class="p-3">JJ</th><th class="p-3">JG</th><th class="p-3">JP</th><th class="p-3">JE</th><th class="p-3 font-bold text-blue-900">PTS</th><th class="p-3 italic">AVG</th></tr>
                     </thead>
-                    <tbody id="tabla-standing" class="divide-y font-bold"></tbody>
+                    <tbody id="tabla-standing" class="divide-y font-bold text-slate-700"></tbody>
                 </table>
             </div>
         </div>
 
-        <div class="flex border-b mb-6 bg-white shadow-sm">
-            <button onclick="cambiarVista('bateo')" id="btn-bateo" class="flex-1 py-4 font-black tab-active">BATEADORES</button>
-            <button onclick="cambiarVista('pitcheo')" id="btn-pitcheo" class="flex-1 py-4 font-black text-gray-400">LANZADORES</button>
+        <div class="flex border-b mb-6 bg-white rounded-t-lg shadow-sm">
+            <button onclick="cambiarVista('bateo')" id="btn-bateo" class="flex-1 py-4 font-black tab-active transition-all">BATEADORES</button>
+            <button onclick="cambiarVista('pitcheo')" id="btn-pitcheo" class="flex-1 py-4 font-black text-gray-400 transition-all">LANZADORES</button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12" id="lideratos"></div>
+        <h2 class="text-xl font-black text-slate-800 mb-6 uppercase border-l-4 border-yellow-500 pl-3">Líderes de la Liga (Top 10)</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="lideratos">
+            </div>
 
         <div class="bg-white rounded-xl shadow-2xl border overflow-hidden">
-            <div class="p-4 bg-gray-50 border-b flex justify-between items-center">
-                <input type="text" id="buscador" onkeyup="actualizar()" placeholder="Buscar jugador..." class="p-2 border rounded text-sm w-64">
-                <select id="filtroEq" onchange="actualizar()" class="p-2 border rounded font-bold text-sm bg-white">
+            <div class="p-4 bg-gray-50 border-b flex flex-wrap justify-between items-center gap-4">
+                <div class="flex items-center gap-4 w-full md:w-auto">
+                    <h3 class="font-black text-blue-900 uppercase" id="titulo-tabla">Registros Detallados</h3>
+                    <input type="text" id="buscador" onkeyup="actualizar()" placeholder="Buscar jugador..." class="p-2 border rounded text-sm w-full md:w-64 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <select id="filtroEq" onchange="actualizar()" class="p-2 border rounded font-bold text-sm bg-white cursor-pointer">
                     <option value="TODOS">Todos los Equipos</option>
-                    <option value="A">Equipo A</option><option value="B">Equipo B</option><option value="C">Equipo C</option>
+                    <option value="A">Equipo A</option>
+                    <option value="B">Equipo B</option>
+                    <option value="C">Equipo C</option>
                 </select>
             </div>
+            
             <div class="table-container">
-                <table class="w-full text-left text-xs border-collapse">
+                <table class="w-full text-left text-[11px] md:text-xs border-collapse">
                     <thead id="head-tabla" class="bg-slate-800 text-white uppercase font-bold"></thead>
                     <tbody id="body-tabla" class="divide-y text-slate-700"></tbody>
                 </table>
@@ -60,9 +72,13 @@
         let vista = 'bateo';
 
         async function iniciar() {
-            const r = await fetch('datos_liga.json');
-            db = await r.json();
-            actualizar();
+            try {
+                const r = await fetch('datos_liga.json');
+                db = await r.json();
+                actualizar();
+            } catch (e) {
+                alert("Error cargando datos_liga.json");
+            }
         }
 
         function cambiarVista(v) {
@@ -76,11 +92,13 @@
             const eq = document.getElementById('filtroEq').value;
             const busq = document.getElementById('buscador').value.toLowerCase();
             
+            // Standing
             document.getElementById('tabla-standing').innerHTML = db.standing.map(s => `
-                <tr class="border-b">
-                    <td class="p-3 text-blue-800 font-black">${s.equipo}</td>
+                <tr class="hover:bg-slate-50 border-b">
+                    <td class="p-3 text-blue-800 font-black italic text-base">${s.equipo}</td>
                     <td>${s.jj}</td><td>${s.jg}</td><td>${s.jp}</td><td>${s.je}</td>
-                    <td class="font-black">${s.pts}</td><td class="italic">${s.avg}</td>
+                    <td class="text-base font-black text-blue-900">${s.pts}</td>
+                    <td class="italic">${s.avg.toFixed(3)}</td>
                 </tr>`).join('');
 
             if(vista === 'bateo') {
@@ -96,27 +114,42 @@
 
         function renderLideresBateo() {
             const cats = [
-                {n:'Batting Average', k:'avg'}, {n:'Home Runs', k:'hr'}, {n:'Total Hits', k:'hits'},
-                {n:'Triples', k:'b3'}, {n:'Dobles', k:'b2'}, {n:'Anotadas', k:'runs'},
-                {n:'RBI', k:'rbi'}, {n:'Bases Robadas', k:'sb'}, {n:'Bases por Bolas', k:'bb'}
+                {n:'Batting Average', k:'avg', d:3},
+                {n:'Home Runs', k:'hr', d:0},
+                {n:'Triple - H3', k:'b3', d:0},
+                {n:'Double - H2', k:'b2', d:0},
+                {n:'Total Hits', k:'hits', d:0},
+                {n:'Run Scored', k:'runs', d:0},
+                {n:'Run Batted In - RBI', k:'rbi', d:0},
+                {n:'Stolen Bases - SB', k:'sb', d:0},
+                {n:'Base on Balls', k:'bb', d:0}
             ];
             generarCards(cats, db.jugadores);
         }
 
         function renderLideresPitcheo() {
-            const cats = [{n:'ERA', k:'era', rev:true}, {n:'Wins', k:'g'}, {n:'Strikeouts', k:'k'}];
+            const cats = [
+                {n:'ERA', k:'era', d:2, rev:true},
+                {n:'Wins', k:'g', d:0},
+                {n:'Strikeouts', k:'k', d:0}
+            ];
             generarCards(cats, db.pitchers);
         }
 
         function generarCards(cats, pool) {
             document.getElementById('lideratos').innerHTML = cats.map(cat => {
-                const tops = [...pool].sort((a,b) => cat.rev ? a[cat.k] - b[cat.k] : b[cat.k] - a[cat.k]).slice(0, 10);
+                const tops = [...pool]
+                    .filter(j => j[cat.k] > 0 || (cat.k === 'avg' && j.vb > 0))
+                    .sort((a,b) => cat.rev ? a[cat.k] - b[cat.k] : b[cat.k] - a[cat.k])
+                    .slice(0, 10);
+
                 return `
-                <div class="bg-white p-4 rounded-xl shadow border-t-4 border-blue-900">
-                    <h4 class="text-[10px] font-black text-blue-900 uppercase mb-2">${cat.n}</h4>
+                <div class="bg-white p-4 rounded-xl shadow border-t-4 border-blue-900 flex flex-col">
+                    <h4 class="text-[10px] font-black text-blue-900 uppercase mb-3 tracking-tighter">${cat.n} (TOP 10)</h4>
                     ${tops.map((j,i) => `
-                        <div class="flex justify-between py-1 border-b text-[11px]">
-                            <span>${i+1}. ${j.nombre}</span><span class="font-black text-blue-600">${j[cat.k]}</span>
+                        <div class="flex justify-between items-center py-1 border-b border-gray-50 text-[11px]">
+                            <span class="${i<3?'font-bold text-slate-800':''} truncate mr-2">${i+1}. ${j.nombre}</span>
+                            <span class="font-black text-blue-600">${cat.d > 0 ? j[cat.k].toFixed(cat.d) : j[cat.k]}</span>
                         </div>`).join('')}
                 </div>`;
             }).join('');
@@ -124,22 +157,50 @@
 
         function renderBateo(l) {
             document.getElementById('head-tabla').innerHTML = `
-                <tr><th class="p-3">Jugador</th><th>Eq</th><th>VB</th><th class="bg-blue-700">AVG</th><th class="bg-blue-700">HR</th><th>H</th><th>2B</th><th>3B</th><th>SB</th><th>BB</th><th>Runs</th><th>RBI</th><th>wOBA</th></tr>`;
+                <tr>
+                    <th class="p-3">Jugador</th><th>Eq</th><th>VB</th><th>TO</th>
+                    <th class="text-blue-300">AVG</th><th class="text-blue-300">SLG</th>
+                    <th class="bg-blue-700">H</th><th>1B</th><th>2B</th><th>3B</th><th class="bg-blue-700">HR</th>
+                    <th class="text-yellow-400">SB</th><th>BB</th><th>SO</th><th>Runs</th><th>RBI</th>
+                    <th class="text-orange-300">wOBA</th><th class="text-orange-300">wRAA</th>
+                </tr>`;
+            
             document.getElementById('body-tabla').innerHTML = l.map(j => `
-                <tr class="hover:bg-blue-50 border-b font-medium">
-                    <td class="p-3 font-bold">${j.nombre}</td><td class="text-center">${j.equipo}</td><td>${j.vb}</td>
-                    <td class="font-black text-blue-700">${j.avg}</td><td class="font-black text-red-700">${j.hr}</td>
-                    <td>${j.hits}</td><td>${j.b2}</td><td>${j.b3}</td><td>${j.sb}</td><td>${j.bb}</td><td>${j.runs}</td><td>${j.rbi}</td><td>${j.woba}</td>
+                <tr class="hover:bg-blue-50 border-b">
+                    <td class="p-3 font-bold text-slate-900">${j.nombre}</td>
+                    <td class="font-bold text-center">${j.equipo}</td>
+                    <td>${j.vb}</td><td>${j.to}</td>
+                    <td class="font-black text-blue-700">${j.avg.toFixed(3)}</td>
+                    <td>${(j.slg || 0).toFixed(3)}</td>
+                    <td class="font-bold bg-slate-50">${j.hits}</td>
+                    <td>${j.b1 || 0}</td><td>${j.b2 || 0}</td><td>${j.b3 || 0}</td>
+                    <td class="font-black bg-slate-50 text-red-700 text-center">${j.hr}</td>
+                    <td class="font-black text-blue-800">${j.sb || 0}</td>
+                    <td>${j.bb || 0}</td><td>${j.so || 0}</td>
+                    <td class="font-bold">${j.runs || 0}</td><td class="font-bold">${j.rbi || 0}</td>
+                    <td class="font-bold text-green-700">${(j.woba || 0).toFixed(3)}</td>
+                    <td class="text-slate-400">${(j.wraa || 0).toFixed(1)}</td>
                 </tr>`).join('');
         }
 
         function renderPitcheo(l) {
             document.getElementById('head-tabla').innerHTML = `
-                <tr><th class="p-3">Lanzador</th><th>Eq</th><th class="bg-blue-700">ERA</th><th>G</th><th>IP</th><th>K</th><th>WHIP</th><th>BB</th></tr>`;
+                <tr>
+                    <th class="p-3">Lanzador</th><th>Eq</th><th class="bg-blue-700">ERA</th>
+                    <th>G</th><th>IP</th><th class="bg-blue-700">K</th>
+                    <th>WHIP</th><th>BB</th><th>ER</th>
+                </tr>`;
+            
             document.getElementById('body-tabla').innerHTML = l.map(p => `
-                <tr class="hover:bg-red-50 border-b font-medium">
-                    <td class="p-3 font-bold">${p.nombre}</td><td class="text-center">${p.equipo}</td>
-                    <td class="font-black text-blue-700">${p.era}</td><td>${p.g}</td><td>${p.ip}</td><td class="font-black text-red-700">${p.k}</td><td>${p.whip}</td><td>${p.bb}</td>
+                <tr class="hover:bg-red-50 border-b">
+                    <td class="p-3 font-bold text-slate-900">${p.nombre}</td>
+                    <td class="font-bold text-center">${p.equipo}</td>
+                    <td class="font-black text-blue-700">${p.era.toFixed(2)}</td>
+                    <td class="text-green-700 font-bold">${p.g}</td>
+                    <td>${p.ip}</td>
+                    <td class="font-black text-red-700 bg-slate-50 text-center">${p.k}</td>
+                    <td>${p.whip.toFixed(2)}</td>
+                    <td>${p.bb}</td><td>${p.er}</td>
                 </tr>`).join('');
         }
 
