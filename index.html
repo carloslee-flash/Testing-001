@@ -12,9 +12,8 @@
         .bg-league { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); }
         .accent { color: #fbbf24; }
         .tab-active { border-bottom: 4px solid #fbbf24; color: #fbbf24; font-weight: 900; }
-        .card-leader { transition: all 0.3s ease; }
-        .card-leader:hover { transform: translateY(-5px); shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
-        .player-photo-main { object-fit: cover; border: 4px solid #1e3a8a; }
+        .card-leader { transition: all 0.3s ease; display: flex; flex-direction: column; }
+        .card-leader:hover { transform: translateY(-5px); }
         .table-container { overflow-x: auto; border-radius: 12px; }
     </style>
 </head>
@@ -28,7 +27,7 @@
     <main class="container mx-auto px-4 -mt-10 pb-12">
         
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-10 border-none">
-            <div class="bg-slate-900 text-white p-3 text-center text-[10px] font-black uppercase">Standing General</div>
+            <div class="bg-slate-900 text-white p-3 text-center text-[10px] font-black uppercase tracking-widest">Tabla de Posiciones</div>
             <div class="table-container">
                 <table class="w-full text-center text-sm font-bold">
                     <thead class="bg-slate-50 text-slate-400 uppercase text-[10px]">
@@ -40,7 +39,7 @@
         </div>
 
         <div class="flex bg-white rounded-xl shadow-lg p-1 mb-8 max-w-md mx-auto">
-            <button onclick="cambiarVista('bateo')" id="btn-bateo" class="flex-1 py-3 rounded-lg text-sm tab-active uppercase">Bateo</button>
+            <button onclick="cambiarVista('bateo')" id="btn-bateo" class="flex-1 py-3 rounded-lg text-sm transition-all tab-active uppercase">Bateo</button>
             <button onclick="cambiarVista('pitcheo')" id="btn-pitcheo" class="flex-1 py-3 rounded-lg text-sm text-slate-400 font-bold uppercase">Pitcheo</button>
         </div>
 
@@ -76,7 +75,7 @@
         let vista = 'bateo';
 
         function f(n, d = false, e = false) {
-            if (!n || n === "") return 0;
+            if (!n || n === "" || n === "0") return 0;
             let num = parseFloat(n.toString().replace(',', '.').replace('%', '').trim());
             if (isNaN(num)) return 0;
             if (e) return num > 100 ? (num/1000).toFixed(2) : num.toFixed(2);
@@ -84,11 +83,10 @@
             return Math.round(num);
         }
 
-        // Función para obtener la ruta de la foto basada en el nombre
         function getFotoURL(nombre) {
             if (!nombre) return 'fotos/default.jpg';
             const slug = nombre.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
-            return `fotos/${slug}.jpg`; // Aquí asumo que usas .jpg
+            return `fotos/${slug}.jpg`;
         }
 
         async function iniciar() {
@@ -116,7 +114,7 @@
             const busq = document.getElementById('buscador').value.toLowerCase();
             
             document.getElementById('tabla-standing').innerHTML = db.standing.map(s => `
-                <tr class="hover:bg-slate-50 transition-colors">
+                <tr class="hover:bg-slate-50 border-b">
                     <td class="p-4 text-left font-black text-blue-900 italic uppercase">${s.Equipo || ""}</td>
                     <td>${f(s.Games)}</td><td>${f(s.Win)}</td><td>${f(s.Loss)}</td><td>${f(s.Tie)}</td>
                     <td class="text-blue-600 font-black text-lg">${f(s.Pts)}</td><td>${f(s['Avg.'], true)}</td>
@@ -134,11 +132,26 @@
         }
 
         function renderLideres(esBateo) {
+            // CATEGORÍAS SOLICITADAS
             const cats = esBateo 
-                ? [{n:'AVG', k:'AVG', d:true}, {n:'HOME RUNS', k:'HR'}, {n:'HITS', k:'HITS'}, {n:'RBI', k:'RBI'}, {n:'CARRERAS', k:'Runs'}, {n:'SLG', k:'SLG', d:true}]
-                : [{n:'EFECTIVIDAD', k:'ERA', e:true, rev:true}, {n:'VICTORIAS', k:'G'}, {n:'PONCHES', k:'K'}];
+                ? [
+                    {n:'BATTING AVG', k:'AVG', d:true}, 
+                    {n:'HOME RUNS', k:'HR'}, 
+                    {n:'TRIPLES (H3)', k:'3B'}, 
+                    {n:'DOUBLES (H2)', k:'2B'}, 
+                    {n:'HITS TOTALES', k:'HITS'}, 
+                    {n:'RUNS SCORED', k:'Runs'}, 
+                    {n:'RBI', k:'RBI'}, 
+                    {n:'STOLEN BASES', k:'SB'}, 
+                    {n:'BASE ON BALLS', k:'BB'}
+                  ]
+                : [
+                    {n:'EFECTIVIDAD', k:'ERA', e:true, rev:true}, 
+                    {n:'VICTORIAS', k:'G'}, 
+                    {n:'PONCHES', k:'K'}
+                  ];
             
-            const limit = esBateo ? 10 : 5;
+            const limit = 10;
 
             document.getElementById('lideratos').innerHTML = cats.map(cat => {
                 const tops = [...(esBateo ? db.jugadores : db.pitchers)]
@@ -149,12 +162,13 @@
                         return cat.rev ? vA - vB : vB - vA;
                     }).slice(0, limit);
 
+                if (tops.length === 0) return '';
                 const primero = tops[0];
 
                 return `
-                <div class="bg-white rounded-3xl shadow-xl overflow-hidden card-leader border border-slate-100 flex flex-col">
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden card-leader border border-slate-100 h-full">
                     <div class="bg-slate-900 p-3 text-center">
-                        <h4 class="text-[10px] font-black text-yellow-400 uppercase tracking-widest">${cat.n} - TOP ${limit}</h4>
+                        <h4 class="text-[10px] font-black text-yellow-400 uppercase tracking-widest">${cat.n} - TOP 10</h4>
                     </div>
                     
                     <div class="relative h-48 bg-slate-200 overflow-hidden">
@@ -162,18 +176,18 @@
                              onerror="this.src='https://ui-avatars.com/api/?name=${(primero.Player || primero.Pitcher).replace(' ','+')}&background=1e3a8a&color=fff'"
                              class="w-full h-full object-cover">
                         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                            <p class="text-white font-black italic uppercase leading-none text-lg">${primero.Player || primero.Pitcher}</p>
-                            <p class="text-yellow-400 font-bold text-sm">#1 EN LA LIGA</p>
+                            <p class="text-white font-black italic uppercase text-lg leading-none">${primero.Player || primero.Pitcher}</p>
+                            <p class="text-yellow-400 font-bold text-xs">LÍDER DE CATEGORÍA</p>
                         </div>
                         <div class="absolute top-4 right-4 bg-yellow-400 text-slate-900 h-10 w-10 rounded-full flex items-center justify-center font-black text-xl shadow-lg border-2 border-white italic">
                             ${f(primero[cat.k], cat.d, cat.e)}
                         </div>
                     </div>
 
-                    <div class="p-4 flex-1 space-y-2 bg-white">
+                    <div class="p-4 flex-1 space-y-2">
                         ${tops.slice(1).map((j,i) => `
                             <div class="flex justify-between items-center py-1 border-b border-slate-50 last:border-0 text-[11px]">
-                                <span class="font-bold text-slate-600 truncate mr-2 italic">${i+2}. ${j.Player || j.Pitcher}</span>
+                                <span class="font-bold text-slate-600 truncate italic">${i+2}. ${j.Player || j.Pitcher}</span>
                                 <span class="font-black text-blue-900">${f(j[cat.k], cat.d, cat.e)}</span>
                             </div>
                         `).join('')}
