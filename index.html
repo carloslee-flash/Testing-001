@@ -8,66 +8,56 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
         .bg-league { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); }
         .accent { color: #fbbf24; }
         .tab-active { border-bottom: 4px solid #fbbf24; color: #fbbf24; font-weight: 900; }
-        .card-leader { transition: transform 0.2s; }
-        .card-leader:hover { transform: translateY(-5px); }
-        .table-container { overflow-x: auto; scrollbar-width: thin; border-radius: 12px; }
-        .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        th { white-space: nowrap; padding: 12px 8px !important; }
-        td { white-space: nowrap; }
+        .card-leader { transition: all 0.3s ease; }
+        .card-leader:hover { transform: translateY(-5px); shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        .player-photo-main { object-fit: cover; border: 4px solid #1e3a8a; }
+        .table-container { overflow-x: auto; border-radius: 12px; }
     </style>
 </head>
-<body class="bg-slate-100">
+<body>
 
-    <header class="bg-league text-white py-10 shadow-2xl relative overflow-hidden">
-        <div class="container mx-auto px-4 text-center relative z-10">
-            <h1 class="text-4xl md:text-5xl font-black uppercase tracking-tighter italic text-shadow">Liga San Jerónimo</h1>
-            <div class="flex justify-center items-center gap-2 mt-2">
-                <span class="h-1 w-10 bg-yellow-400"></span>
-                <p class="accent font-bold uppercase text-sm tracking-widest">Estadísticas Pro 2026</p>
-                <span class="h-1 w-10 bg-yellow-400"></span>
-            </div>
-        </div>
+    <header class="bg-league text-white py-12 shadow-2xl text-center">
+        <h1 class="text-4xl md:text-5xl font-black uppercase italic tracking-tighter">Liga San Jerónimo</h1>
+        <p class="accent font-bold uppercase text-sm mt-2 tracking-widest">Estadísticas Oficiales 2026</p>
     </header>
 
-    <main class="container mx-auto px-4 -mt-8 pb-12">
+    <main class="container mx-auto px-4 -mt-10 pb-12">
         
-        <div class="bg-white rounded-2xl shadow-xl border-none overflow-hidden mb-10">
-            <div class="bg-slate-900 text-white p-3 text-center text-xs font-black uppercase tracking-widest">Standing General</div>
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-10 border-none">
+            <div class="bg-slate-900 text-white p-3 text-center text-[10px] font-black uppercase">Standing General</div>
             <div class="table-container">
-                <table class="w-full text-center">
-                    <thead class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold">
-                        <tr><th class="p-4 text-left">Equipo</th><th>JJ</th><th>JG</th><th>JP</th><th>JE</th><th class="text-blue-600">PTS</th><th class="italic">AVG</th></tr>
+                <table class="w-full text-center text-sm font-bold">
+                    <thead class="bg-slate-50 text-slate-400 uppercase text-[10px]">
+                        <tr><th class="p-4 text-left">Equipo</th><th>JJ</th><th>JG</th><th>JP</th><th>JE</th><th class="text-blue-600">PTS</th><th>AVG</th></tr>
                     </thead>
-                    <tbody id="tabla-standing" class="divide-y text-slate-700 font-bold"></tbody>
+                    <tbody id="tabla-standing" class="divide-y divide-slate-100"></tbody>
                 </table>
             </div>
         </div>
 
-        <div class="flex bg-white rounded-xl shadow-lg p-1 mb-8 max-w-md mx-auto border border-slate-200">
-            <button onclick="cambiarVista('bateo')" id="btn-bateo" class="flex-1 py-3 rounded-lg text-sm transition-all tab-active uppercase">Bateo</button>
-            <button onclick="cambiarVista('pitcheo')" id="btn-pitcheo" class="flex-1 py-3 rounded-lg text-sm transition-all text-slate-400 font-bold uppercase">Pitcheo</button>
+        <div class="flex bg-white rounded-xl shadow-lg p-1 mb-8 max-w-md mx-auto">
+            <button onclick="cambiarVista('bateo')" id="btn-bateo" class="flex-1 py-3 rounded-lg text-sm tab-active uppercase">Bateo</button>
+            <button onclick="cambiarVista('pitcheo')" id="btn-pitcheo" class="flex-1 py-3 rounded-lg text-sm text-slate-400 font-bold uppercase">Pitcheo</button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="lideratos"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12" id="lideratos"></div>
 
-        <div class="bg-white rounded-2xl shadow-2xl border-none overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
             <div class="p-6 bg-slate-50 border-b flex flex-wrap justify-between items-center gap-4">
-                <input type="text" id="buscador" onkeyup="actualizar()" placeholder="Buscar jugador..." class="bg-white border rounded-lg px-4 py-2 text-slate-800 font-bold w-full md:w-64 outline-none focus:border-blue-500">
-                <select id="filtroEq" onchange="actualizar()" class="bg-white border border-slate-200 rounded-lg px-4 py-2 text-xs font-black text-blue-900 shadow-sm cursor-pointer outline-none">
+                <input type="text" id="buscador" onkeyup="actualizar()" placeholder="Buscar jugador..." class="border rounded-lg px-4 py-2 text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-64">
+                <select id="filtroEq" onchange="actualizar()" class="border rounded-lg px-4 py-2 text-xs font-black text-blue-900 cursor-pointer">
                     <option value="TODOS">TODOS LOS EQUIPOS</option>
-                    <option value="A">EQUIPO A</option>
-                    <option value="B">EQUIPO B</option>
-                    <option value="C">EQUIPO C</option>
+                    <option value="A">EQUIPO A</option><option value="B">EQUIPO B</option><option value="C">EQUIPO C</option>
                 </select>
             </div>
             <div class="table-container">
                 <table class="w-full text-left text-[11px]">
-                    <thead id="head-tabla" class="bg-slate-900 text-slate-300 uppercase font-black tracking-tighter"></thead>
-                    <tbody id="body-tabla" class="divide-y divide-slate-100 text-slate-600 font-medium"></tbody>
+                    <thead id="head-tabla" class="bg-slate-900 text-slate-300 uppercase font-black tracking-widest"></thead>
+                    <tbody id="body-tabla" class="divide-y divide-slate-100 font-medium"></tbody>
                 </table>
             </div>
         </div>
@@ -85,22 +75,20 @@
         let db = { standing: [], jugadores: [], pitchers: [] };
         let vista = 'bateo';
 
-        // Formateador numérico inteligente
-        function f(n, esDecimal = false, esERA = false) {
-            if (n === undefined || n === null || n === "" || n === "0") return 0;
+        function f(n, d = false, e = false) {
+            if (!n || n === "") return 0;
             let num = parseFloat(n.toString().replace(',', '.').replace('%', '').trim());
             if (isNaN(num)) return 0;
-
-            if (esERA) {
-                if (num > 100) num = num / 1000;
-                return num.toFixed(2);
-            }
-            // Si es AVG o SLG y viene como 0.450 o 450.123
-            if (esDecimal) {
-                if (num > 0 && num < 2) return Math.round(num * 1000);
-                return Math.round(num);
-            }
+            if (e) return num > 100 ? (num/1000).toFixed(2) : num.toFixed(2);
+            if (d && num > 0 && num < 2) return Math.round(num * 1000);
             return Math.round(num);
+        }
+
+        // Función para obtener la ruta de la foto basada en el nombre
+        function getFotoURL(nombre) {
+            if (!nombre) return 'fotos/default.jpg';
+            const slug = nombre.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+            return `fotos/${slug}.jpg`; // Aquí asumo que usas .jpg
         }
 
         async function iniciar() {
@@ -113,7 +101,7 @@
                 const jC = Papa.parse(c, { header: true, skipEmptyLines: true }).data.map(j => ({...j, equipo: 'C'}));
                 db.jugadores = [...jA, ...jB, ...jC];
                 actualizar();
-            } catch (e) { console.error("Error cargando Sheets", e); }
+            } catch (e) { console.error(e); }
         }
 
         function cambiarVista(v) {
@@ -127,9 +115,8 @@
             const eq = document.getElementById('filtroEq').value;
             const busq = document.getElementById('buscador').value.toLowerCase();
             
-            // Render Standing
             document.getElementById('tabla-standing').innerHTML = db.standing.map(s => `
-                <tr class="hover:bg-slate-50 border-b">
+                <tr class="hover:bg-slate-50 transition-colors">
                     <td class="p-4 text-left font-black text-blue-900 italic uppercase">${s.Equipo || ""}</td>
                     <td>${f(s.Games)}</td><td>${f(s.Win)}</td><td>${f(s.Loss)}</td><td>${f(s.Tie)}</td>
                     <td class="text-blue-600 font-black text-lg">${f(s.Pts)}</td><td>${f(s['Avg.'], true)}</td>
@@ -148,8 +135,8 @@
 
         function renderLideres(esBateo) {
             const cats = esBateo 
-                ? [{n:'AVG', k:'AVG', d:true}, {n:'HR', k:'HR'}, {n:'HITS', k:'HITS'}, {n:'RBI', k:'RBI'}, {n:'RUNS', k:'Runs'}, {n:'SLG', k:'SLG', d:true}]
-                : [{n:'ERA', k:'ERA', e:true, rev:true}, {n:'VICTORIAS', k:'G'}, {n:'PONCHES', k:'K'}];
+                ? [{n:'AVG', k:'AVG', d:true}, {n:'HOME RUNS', k:'HR'}, {n:'HITS', k:'HITS'}, {n:'RBI', k:'RBI'}, {n:'CARRERAS', k:'Runs'}, {n:'SLG', k:'SLG', d:true}]
+                : [{n:'EFECTIVIDAD', k:'ERA', e:true, rev:true}, {n:'VICTORIAS', k:'G'}, {n:'PONCHES', k:'K'}];
             
             const limit = esBateo ? 10 : 5;
 
@@ -162,69 +149,63 @@
                         return cat.rev ? vA - vB : vB - vA;
                     }).slice(0, limit);
 
+                const primero = tops[0];
+
                 return `
-                <div class="bg-white p-5 rounded-2xl shadow-lg border-t-8 border-blue-900 card-leader">
-                    <h4 class="text-[10px] font-black text-slate-400 uppercase mb-4 tracking-widest">${cat.n} - TOP ${limit}</h4>
-                    ${tops.map((j,i) => `
-                        <div class="flex justify-between items-center mb-2 last:mb-0">
-                            <span class="text-sm ${i===0?'font-black text-blue-900':'font-bold text-slate-600'} truncate mr-2">${i+1}. ${j.Player || j.Pitcher}</span>
-                            <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-[11px] font-black">${f(j[cat.k], cat.d, cat.e)}</span>
-                        </div>`).join('')}
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden card-leader border border-slate-100 flex flex-col">
+                    <div class="bg-slate-900 p-3 text-center">
+                        <h4 class="text-[10px] font-black text-yellow-400 uppercase tracking-widest">${cat.n} - TOP ${limit}</h4>
+                    </div>
+                    
+                    <div class="relative h-48 bg-slate-200 overflow-hidden">
+                        <img src="${getFotoURL(primero.Player || primero.Pitcher)}" 
+                             onerror="this.src='https://ui-avatars.com/api/?name=${(primero.Player || primero.Pitcher).replace(' ','+')}&background=1e3a8a&color=fff'"
+                             class="w-full h-full object-cover">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                            <p class="text-white font-black italic uppercase leading-none text-lg">${primero.Player || primero.Pitcher}</p>
+                            <p class="text-yellow-400 font-bold text-sm">#1 EN LA LIGA</p>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-yellow-400 text-slate-900 h-10 w-10 rounded-full flex items-center justify-center font-black text-xl shadow-lg border-2 border-white italic">
+                            ${f(primero[cat.k], cat.d, cat.e)}
+                        </div>
+                    </div>
+
+                    <div class="p-4 flex-1 space-y-2 bg-white">
+                        ${tops.slice(1).map((j,i) => `
+                            <div class="flex justify-between items-center py-1 border-b border-slate-50 last:border-0 text-[11px]">
+                                <span class="font-bold text-slate-600 truncate mr-2 italic">${i+2}. ${j.Player || j.Pitcher}</span>
+                                <span class="font-black text-blue-900">${f(j[cat.k], cat.d, cat.e)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>`;
             }).join('');
         }
 
         function renderBateo(l) {
-            document.getElementById('head-tabla').innerHTML = `
-                <tr>
-                    <th class="p-4">Jugador</th>
-                    <th class="text-center">Eq</th>
-                    <th>TO</th>
-                    <th>VB</th>
-                    <th class="bg-blue-900 text-white">AVG</th>
-                    <th class="bg-slate-700 text-white">SLG</th>
-                    <th class="text-blue-600 font-black">H</th>
-                    <th>1B</th>
-                    <th>2B</th>
-                    <th>3B</th>
-                    <th class="text-red-600">HR</th>
-                    <th>RBI</th>
-                    <th>R</th>
-                    <th>BB</th>
-                    <th>SO</th>
-                    <th>SB</th>
-                </tr>`;
-            
+            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Jugador</th><th>Eq</th><th>TO</th><th>VB</th><th class="bg-blue-600 text-white">AVG</th><th>SLG</th><th>H</th><th>1B</th><th>2B</th><th>3B</th><th class="text-red-600">HR</th><th>RBI</th><th>R</th><th>BB</th><th>SO</th><th>SB</th></tr>`;
             document.getElementById('body-tabla').innerHTML = l.map(j => `
-                <tr class="hover:bg-slate-50">
-                    <td class="p-4 font-black text-slate-900 uppercase">${j.Player}</td>
-                    <td class="text-center"><span class="bg-slate-200 px-2 py-0.5 rounded font-bold">${j.equipo}</span></td>
-                    <td class="font-bold">${f(j.TO)}</td>
-                    <td class="font-bold">${f(j.VB)}</td>
-                    <td class="font-black text-blue-600 bg-blue-50 text-sm italic">${f(j.AVG, true)}</td>
-                    <td class="font-black text-slate-700 bg-slate-100 text-sm italic">${f(j.SLG, true)}</td>
-                    <td class="font-black text-blue-600">${f(j.HITS)}</td>
-                    <td>${f(j['1B'])}</td>
-                    <td>${f(j['2B'])}</td>
-                    <td class="${f(j['3B']) > 0 ? 'text-blue-600 font-bold' : ''}">${f(j['3B'])}</td>
-                    <td class="text-red-600 font-black text-sm">${f(j.HR)}</td>
-                    <td class="font-black">${f(j.RBI)}</td>
-                    <td>${f(j.Runs)}</td>
-                    <td>${f(j.BB)}</td>
-                    <td class="text-slate-300">${f(j.SO)}</td>
-                    <td class="font-bold text-green-600">${f(j.SB)}</td>
+                <tr class="hover:bg-blue-50 border-b border-slate-50">
+                    <td class="p-4 font-black text-slate-900 uppercase italic leading-tight">${j.Player}</td>
+                    <td class="text-center font-bold text-slate-400 text-[10px]">${j.equipo}</td>
+                    <td>${f(j.TO)}</td><td>${f(j.VB)}</td>
+                    <td class="font-black text-blue-700 bg-blue-50 text-xs">${f(j.AVG, true)}</td>
+                    <td class="font-bold text-slate-400">${f(j.SLG, true)}</td>
+                    <td class="font-black">${f(j.HITS)}</td><td>${f(j['1B'])}</td><td>${f(j['2B'])}</td><td>${f(j['3B'])}</td>
+                    <td class="text-red-600 font-black">${f(j.HR)}</td><td class="font-black text-slate-800">${f(j.RBI)}</td>
+                    <td>${f(j.Runs)}</td><td>${f(j.BB)}</td><td class="text-slate-300">${f(j.SO)}</td><td class="text-green-600 font-bold">${f(j.SB)}</td>
                 </tr>`).join('');
         }
 
         function renderPitcheo(l) {
-            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Lanzador</th><th>Eq</th><th class="text-blue-600">ERA</th><th>G</th><th>IP</th><th class="text-red-600 text-center">K</th><th>WHIP</th><th>BB</th></tr>`;
+            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Lanzador</th><th>Eq</th><th class="bg-blue-600 text-white">ERA</th><th>G</th><th>IP</th><th class="bg-red-600 text-white">K</th><th>WHIP</th><th>BB</th></tr>`;
             document.getElementById('body-tabla').innerHTML = l.map(p => `
-                <tr class="hover:bg-slate-50">
-                    <td class="p-4 font-black text-slate-900 uppercase">${p.Pitcher}</td>
-                    <td class="text-center font-bold">${p.Equipo}</td>
-                    <td class="font-black text-blue-600 text-sm italic">${f(p.ERA, false, true)}</td>
+                <tr class="hover:bg-red-50 border-b border-slate-50">
+                    <td class="p-4 font-black text-slate-900 uppercase italic">${p.Pitcher}</td>
+                    <td class="text-center font-bold text-slate-400 text-[10px]">${p.Equipo}</td>
+                    <td class="font-black text-blue-700 bg-blue-50 text-xs">${f(p.ERA, false, true)}</td>
                     <td>${f(p.G)}</td><td>${f(p.IP)}</td>
-                    <td class="font-black text-red-600 text-center text-sm">${f(p.K)}</td>
+                    <td class="font-black text-red-600 bg-red-50 text-center">${f(p.K)}</td>
                     <td>${f(p.WHIP)}</td><td>${f(p.BB)}</td>
                 </tr>`).join('');
         }
