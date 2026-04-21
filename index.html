@@ -16,6 +16,8 @@
         .card-leader:hover { transform: translateY(-5px); }
         .table-container { overflow-x: auto; scrollbar-width: thin; border-radius: 12px; }
         .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        th { white-space: nowrap; padding: 12px 8px !important; }
+        td { white-space: nowrap; }
     </style>
 </head>
 <body class="bg-slate-100">
@@ -25,7 +27,7 @@
             <h1 class="text-4xl md:text-5xl font-black uppercase tracking-tighter italic text-shadow">Liga San Jerónimo</h1>
             <div class="flex justify-center items-center gap-2 mt-2">
                 <span class="h-1 w-10 bg-yellow-400"></span>
-                <p class="accent font-bold uppercase text-sm tracking-widest">Estadísticas Oficiales 2026</p>
+                <p class="accent font-bold uppercase text-sm tracking-widest">Estadísticas Pro 2026</p>
                 <span class="h-1 w-10 bg-yellow-400"></span>
             </div>
         </div>
@@ -54,10 +56,8 @@
 
         <div class="bg-white rounded-2xl shadow-2xl border-none overflow-hidden">
             <div class="p-6 bg-slate-50 border-b flex flex-wrap justify-between items-center gap-4">
-                <div class="flex items-center gap-4 w-full md:w-auto">
-                    <input type="text" id="buscador" onkeyup="actualizar()" placeholder="Buscar jugador..." class="bg-white border rounded-lg px-4 py-2 text-slate-800 font-bold placeholder-slate-400 w-full md:w-64">
-                </div>
-                <select id="filtroEq" onchange="actualizar()" class="bg-white border border-slate-200 rounded-lg px-4 py-2 text-xs font-black text-blue-900 shadow-sm outline-none cursor-pointer">
+                <input type="text" id="buscador" onkeyup="actualizar()" placeholder="Buscar jugador..." class="bg-white border rounded-lg px-4 py-2 text-slate-800 font-bold w-full md:w-64 outline-none focus:border-blue-500">
+                <select id="filtroEq" onchange="actualizar()" class="bg-white border border-slate-200 rounded-lg px-4 py-2 text-xs font-black text-blue-900 shadow-sm cursor-pointer outline-none">
                     <option value="TODOS">TODOS LOS EQUIPOS</option>
                     <option value="A">EQUIPO A</option>
                     <option value="B">EQUIPO B</option>
@@ -65,8 +65,8 @@
                 </select>
             </div>
             <div class="table-container">
-                <table class="w-full text-left text-xs">
-                    <thead id="head-tabla" class="bg-slate-900 text-slate-300 uppercase font-black tracking-wider"></thead>
+                <table class="w-full text-left text-[11px]">
+                    <thead id="head-tabla" class="bg-slate-900 text-slate-300 uppercase font-black tracking-tighter"></thead>
                     <tbody id="body-tabla" class="divide-y divide-slate-100 text-slate-600 font-medium"></tbody>
                 </table>
             </div>
@@ -74,17 +74,19 @@
     </main>
 
     <script>
-        const URL_STANDING = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTy5EGIBeE8HkatJhMNRmGIMD55niqmhwH4O-0JTf10WjSkclcNSThUHD6KbDsSyvg41mY1B7eMinBG/pub?gid=884290641&single=true&output=csv';
-        const URL_BATEO_A  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTy5EGIBeE8HkatJhMNRmGIMD55niqmhwH4O-0JTf10WjSkclcNSThUHD6KbDsSyvg41mY1B7eMinBG/pub?gid=1561811561&single=true&output=csv';
-        const URL_BATEO_B  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTy5EGIBeE8HkatJhMNRmGIMD55niqmhwH4O-0JTf10WjSkclcNSThUHD6KbDsSyvg41mY1B7eMinBG/pub?gid=574063817&single=true&output=csv';
-        const URL_BATEO_C  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTy5EGIBeE8HkatJhMNRmGIMD55niqmhwH4O-0JTf10WjSkclcNSThUHD6KbDsSyvg41mY1B7eMinBG/pub?gid=948591663&single=true&output=csv';
-        const URL_PITCHEO  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTy5EGIBeE8HkatJhMNRmGIMD55niqmhwH4O-0JTf10WjSkclcNSThUHD6KbDsSyvg41mY1B7eMinBG/pub?gid=1522769208&single=true&output=csv';
+        const URLS = {
+            standing: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTy5EGIBeE8HkatJhMNRmGIMD55niqmhwH4O-0JTf10WjSkclcNSThUHD6KbDsSyvg41mY1B7eMinBG/pub?gid=884290641&single=true&output=csv',
+            bateoA: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTy5EGIBeE8HkatJhMNRmGIMD55niqmhwH4O-0JTf10WjSkclcNSThUHD6KbDsSyvg41mY1B7eMinBG/pub?gid=1561811561&single=true&output=csv',
+            bateoB: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTy5EGIBeE8HkatJhMNRmGIMD55niqmhwH4O-0JTf10WjSkclcNSThUHD6KbDsSyvg41mY1B7eMinBG/pub?gid=574063817&single=true&output=csv',
+            bateoC: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTy5EGIBeE8HkatJhMNRmGIMD55niqmhwH4O-0JTf10WjSkclcNSThUHD6KbDsSyvg41mY1B7eMinBG/pub?gid=948591663&single=true&output=csv',
+            picheo: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTy5EGIBeE8HkatJhMNRmGIMD55niqmhwH4O-0JTf10WjSkclcNSThUHD6KbDsSyvg41mY1B7eMinBG/pub?gid=1522769208&single=true&output=csv'
+        };
 
         let db = { standing: [], jugadores: [], pitchers: [] };
         let vista = 'bateo';
 
-        // FUNCIÓN CORREGIDA PARA EVITAR EL ERROR DE "1000"
-        function f(n, esPromedio = false, esERA = false) {
+        // Formateador numérico inteligente
+        function f(n, esDecimal = false, esERA = false) {
             if (n === undefined || n === null || n === "" || n === "0") return 0;
             let num = parseFloat(n.toString().replace(',', '.').replace('%', '').trim());
             if (isNaN(num)) return 0;
@@ -93,34 +95,25 @@
                 if (num > 100) num = num / 1000;
                 return num.toFixed(2);
             }
-            
-            // Solo si sabemos que es una columna de promedio (como AVG o SLG)
-            // y el número es un decimal menor a 1 (ej: 0.383), lo convertimos a 383
-            if (esPromedio && num > 0 && num < 1.1) {
-                return Math.round(num * 1000);
+            // Si es AVG o SLG y viene como 0.450 o 450.123
+            if (esDecimal) {
+                if (num > 0 && num < 2) return Math.round(num * 1000);
+                return Math.round(num);
             }
-
-            // Para todo lo demás (HITS, 2B, JJ, etc.), devolvemos el número entero redondeado
             return Math.round(num);
         }
 
         async function iniciar() {
             try {
-                const [resS, resA, resB, resC, resP] = await Promise.all([
-                    fetch(URL_STANDING).then(r => r.text()),
-                    fetch(URL_BATEO_A).then(r => r.text()),
-                    fetch(URL_BATEO_B).then(r => r.text()),
-                    fetch(URL_BATEO_C).then(r => r.text()),
-                    fetch(URL_PITCHEO).then(r => r.text())
-                ]);
-                db.standing = Papa.parse(resS, { header: true, skipEmptyLines: true }).data;
-                db.pitchers = Papa.parse(resP, { header: true, skipEmptyLines: true }).data;
-                const jA = Papa.parse(resA, { header: true, skipEmptyLines: true }).data.map(j => ({...j, equipo: 'A'}));
-                const jB = Papa.parse(resB, { header: true, skipEmptyLines: true }).data.map(j => ({...j, equipo: 'B'}));
-                const jC = Papa.parse(resC, { header: true, skipEmptyLines: true }).data.map(j => ({...j, equipo: 'C'}));
+                const [s, a, b, c, p] = await Promise.all(Object.values(URLS).map(u => fetch(u).then(r => r.text())));
+                db.standing = Papa.parse(s, { header: true, skipEmptyLines: true }).data;
+                db.pitchers = Papa.parse(p, { header: true, skipEmptyLines: true }).data;
+                const jA = Papa.parse(a, { header: true, skipEmptyLines: true }).data.map(j => ({...j, equipo: 'A'}));
+                const jB = Papa.parse(b, { header: true, skipEmptyLines: true }).data.map(j => ({...j, equipo: 'B'}));
+                const jC = Papa.parse(c, { header: true, skipEmptyLines: true }).data.map(j => ({...j, equipo: 'C'}));
                 db.jugadores = [...jA, ...jB, ...jC];
                 actualizar();
-            } catch (e) { console.error("Error", e); }
+            } catch (e) { console.error("Error cargando Sheets", e); }
         }
 
         function cambiarVista(v) {
@@ -134,9 +127,9 @@
             const eq = document.getElementById('filtroEq').value;
             const busq = document.getElementById('buscador').value.toLowerCase();
             
-            // Standing - Usamos f(n, false) para que no multiplique JJ, JG, JP por 1000
+            // Render Standing
             document.getElementById('tabla-standing').innerHTML = db.standing.map(s => `
-                <tr class="hover:bg-slate-50">
+                <tr class="hover:bg-slate-50 border-b">
                     <td class="p-4 text-left font-black text-blue-900 italic uppercase">${s.Equipo || ""}</td>
                     <td>${f(s.Games)}</td><td>${f(s.Win)}</td><td>${f(s.Loss)}</td><td>${f(s.Tie)}</td>
                     <td class="text-blue-600 font-black text-lg">${f(s.Pts)}</td><td>${f(s['Avg.'], true)}</td>
@@ -155,17 +148,17 @@
 
         function renderLideres(esBateo) {
             const cats = esBateo 
-                ? [{n:'AVG', k:'AVG', p:true}, {n:'HR', k:'HR'}, {n:'HITS', k:'HITS'}, {n:'RBI', k:'RBI'}, {n:'RUNS', k:'Runs'}, {n:'ROBOS', k:'SB'}]
-                : [{n:'ERA', k:'ERA', p:false, e:true, rev:true}, {n:'VICTORIAS', k:'G'}, {n:'PONCHES', k:'K'}];
+                ? [{n:'AVG', k:'AVG', d:true}, {n:'HR', k:'HR'}, {n:'HITS', k:'HITS'}, {n:'RBI', k:'RBI'}, {n:'RUNS', k:'Runs'}, {n:'SLG', k:'SLG', d:true}]
+                : [{n:'ERA', k:'ERA', e:true, rev:true}, {n:'VICTORIAS', k:'G'}, {n:'PONCHES', k:'K'}];
             
-            const limit = esBateo ? 10 : 5; // TOP 10 para bateo, TOP 5 para pitcheo
+            const limit = esBateo ? 10 : 5;
 
             document.getElementById('lideratos').innerHTML = cats.map(cat => {
                 const tops = [...(esBateo ? db.jugadores : db.pitchers)]
                     .filter(j => j[cat.k] && j[cat.k] !== "")
                     .sort((a,b) => {
-                        let vA = f(a[cat.k], cat.p, cat.e);
-                        let vB = f(b[cat.k], cat.p, cat.e);
+                        let vA = f(a[cat.k], cat.d, cat.e);
+                        let vB = f(b[cat.k], cat.d, cat.e);
                         return cat.rev ? vA - vB : vB - vA;
                     }).slice(0, limit);
 
@@ -173,29 +166,58 @@
                 <div class="bg-white p-5 rounded-2xl shadow-lg border-t-8 border-blue-900 card-leader">
                     <h4 class="text-[10px] font-black text-slate-400 uppercase mb-4 tracking-widest">${cat.n} - TOP ${limit}</h4>
                     ${tops.map((j,i) => `
-                        <div class="flex justify-between items-center mb-2">
+                        <div class="flex justify-between items-center mb-2 last:mb-0">
                             <span class="text-sm ${i===0?'font-black text-blue-900':'font-bold text-slate-600'} truncate mr-2">${i+1}. ${j.Player || j.Pitcher}</span>
-                            <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-[11px] font-black">${f(j[cat.k], cat.p, cat.e)}</span>
+                            <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-[11px] font-black">${f(j[cat.k], cat.d, cat.e)}</span>
                         </div>`).join('')}
                 </div>`;
             }).join('');
         }
 
         function renderBateo(l) {
-            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Jugador</th><th>Eq</th><th>VB</th><th class="text-blue-400">AVG</th><th class="text-red-400 text-center">HR</th><th>H</th><th>2B</th><th>3B</th><th>SB</th><th>R</th><th>RBI</th><th>OBP%</th></tr>`;
+            document.getElementById('head-tabla').innerHTML = `
+                <tr>
+                    <th class="p-4">Jugador</th>
+                    <th class="text-center">Eq</th>
+                    <th>TO</th>
+                    <th>VB</th>
+                    <th class="bg-blue-900 text-white">AVG</th>
+                    <th class="bg-slate-700 text-white">SLG</th>
+                    <th class="text-blue-600 font-black">H</th>
+                    <th>1B</th>
+                    <th>2B</th>
+                    <th>3B</th>
+                    <th class="text-red-600">HR</th>
+                    <th>RBI</th>
+                    <th>R</th>
+                    <th>BB</th>
+                    <th>SO</th>
+                    <th>SB</th>
+                </tr>`;
+            
             document.getElementById('body-tabla').innerHTML = l.map(j => `
                 <tr class="hover:bg-slate-50">
                     <td class="p-4 font-black text-slate-900 uppercase">${j.Player}</td>
-                    <td class="text-center font-bold">${j.equipo}</td>
-                    <td>${f(j.VB)}</td>
-                    <td class="font-black text-blue-600 text-sm italic">${f(j.AVG, true)}</td>
-                    <td class="text-center text-red-600 font-black text-sm">${f(j.HR)}</td>
-                    <td>${f(j.HITS)}</td><td>${f(j['2B'])}</td><td>${f(j['3B'])}</td><td>${f(j.SB)}</td><td>${f(j.Runs)}</td><td>${f(j.RBI)}</td><td>${f(j['% OBP'], true)}</td>
+                    <td class="text-center"><span class="bg-slate-200 px-2 py-0.5 rounded font-bold">${j.equipo}</span></td>
+                    <td class="font-bold">${f(j.TO)}</td>
+                    <td class="font-bold">${f(j.VB)}</td>
+                    <td class="font-black text-blue-600 bg-blue-50 text-sm italic">${f(j.AVG, true)}</td>
+                    <td class="font-black text-slate-700 bg-slate-100 text-sm italic">${f(j.SLG, true)}</td>
+                    <td class="font-black text-blue-600">${f(j.HITS)}</td>
+                    <td>${f(j['1B'])}</td>
+                    <td>${f(j['2B'])}</td>
+                    <td class="${f(j['3B']) > 0 ? 'text-blue-600 font-bold' : ''}">${f(j['3B'])}</td>
+                    <td class="text-red-600 font-black text-sm">${f(j.HR)}</td>
+                    <td class="font-black">${f(j.RBI)}</td>
+                    <td>${f(j.Runs)}</td>
+                    <td>${f(j.BB)}</td>
+                    <td class="text-slate-300">${f(j.SO)}</td>
+                    <td class="font-bold text-green-600">${f(j.SB)}</td>
                 </tr>`).join('');
         }
 
         function renderPitcheo(l) {
-            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Lanzador</th><th>Eq</th><th class="text-blue-400">ERA</th><th>G</th><th>IP</th><th class="text-red-400 text-center">K</th><th>WHIP</th></tr>`;
+            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Lanzador</th><th>Eq</th><th class="text-blue-600">ERA</th><th>G</th><th>IP</th><th class="text-red-600 text-center">K</th><th>WHIP</th><th>BB</th></tr>`;
             document.getElementById('body-tabla').innerHTML = l.map(p => `
                 <tr class="hover:bg-slate-50">
                     <td class="p-4 font-black text-slate-900 uppercase">${p.Pitcher}</td>
@@ -203,7 +225,7 @@
                     <td class="font-black text-blue-600 text-sm italic">${f(p.ERA, false, true)}</td>
                     <td>${f(p.G)}</td><td>${f(p.IP)}</td>
                     <td class="font-black text-red-600 text-center text-sm">${f(p.K)}</td>
-                    <td>${f(p.WHIP)}</td>
+                    <td>${f(p.WHIP)}</td><td>${f(p.BB)}</td>
                 </tr>`).join('');
         }
 
