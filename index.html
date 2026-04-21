@@ -7,58 +7,82 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        .bg-league { background: linear-gradient(135deg, #1e3a8a 0%, #111827 100%); }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .bg-league { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); }
         .accent { color: #fbbf24; }
-        .tab-active { border-bottom: 4px solid #fbbf24; color: #fbbf24; }
-        .table-container { overflow-x: auto; scrollbar-width: thin; }
+        .tab-active { border-bottom: 4px solid #fbbf24; color: #fbbf24; font-weight: 900; }
+        .card-leader { transition: transform 0.2s; }
+        .card-leader:hover { transform: translateY(-5px); }
+        .table-container { overflow-x: auto; scrollbar-width: thin; border-radius: 12px; }
+        .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
     </style>
 </head>
-<body class="bg-gray-50 font-sans text-slate-900">
+<body class="bg-slate-100">
 
-    <header class="bg-league text-white py-6 shadow-xl text-center">
-        <h1 class="text-3xl font-black uppercase italic">Liga San Jerónimo</h1>
-        <p class="accent font-bold mt-1 uppercase text-sm italic">Panel Automatizado 2026</p>
+    <header class="bg-league text-white py-10 shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-4 opacity-10">
+            <svg width="200" height="200" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" stroke="white" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-4xl md:text-5xl font-black uppercase tracking-tighter italic text-shadow">Liga San Jerónimo</h1>
+            <div class="flex justify-center items-center gap-2 mt-2">
+                <span class="h-1 w-10 bg-yellow-400"></span>
+                <p class="accent font-bold uppercase text-sm tracking-widest">Panel de Control 2026</p>
+                <span class="h-1 w-10 bg-yellow-400"></span>
+            </div>
+        </div>
     </header>
 
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 -mt-8 pb-12">
         
-        <div class="mb-10 bg-white rounded-xl shadow-md border overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-xl border-none overflow-hidden mb-10">
+            <div class="bg-slate-900 text-white p-3 text-center text-xs font-black uppercase tracking-widest">Posiciones de la Temporada</div>
             <div class="table-container">
-                <table class="w-full text-center text-sm">
-                    <thead class="bg-gray-100 text-gray-600 uppercase text-[11px]">
-                        <tr><th class="p-3 text-left">Equipo</th><th>JJ</th><th>JG</th><th>JP</th><th>JE</th><th>PTS</th><th class="italic">AVG</th></tr>
+                <table class="w-full text-center">
+                    <thead class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold">
+                        <tr><th class="p-4 text-left">Equipo</th><th>JJ</th><th>JG</th><th>JP</th><th>JE</th><th class="text-blue-600">PTS</th><th class="italic">AVG</th></tr>
                     </thead>
-                    <tbody id="tabla-standing" class="divide-y font-bold text-slate-700"></tbody>
+                    <tbody id="tabla-standing" class="divide-y text-slate-700 font-bold"></tbody>
                 </table>
             </div>
         </div>
 
-        <div class="flex border-b mb-6 bg-white rounded-t-lg shadow-sm">
-            <button onclick="cambiarVista('bateo')" id="btn-bateo" class="flex-1 py-4 font-black tab-active transition-all">BATEADORES</button>
-            <button onclick="cambiarVista('pitcheo')" id="btn-pitcheo" class="flex-1 py-4 font-black text-gray-400 transition-all">LANZADORES</button>
+        <div class="flex bg-white rounded-xl shadow-lg p-1 mb-8 max-w-md mx-auto border border-slate-200">
+            <button onclick="cambiarVista('bateo')" id="btn-bateo" class="flex-1 py-3 rounded-lg text-sm transition-all tab-active uppercase">Bateo</button>
+            <button onclick="cambiarVista('pitcheo')" id="btn-pitcheo" class="flex-1 py-3 rounded-lg text-sm transition-all text-slate-400 font-bold uppercase">Pitcheo</button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="lideratos"></div>
 
-        <div class="bg-white rounded-xl shadow-2xl border overflow-hidden">
-            <div class="p-4 bg-gray-50 border-b flex flex-wrap justify-between items-center gap-4">
-                <input type="text" id="buscador" onkeyup="actualizar()" placeholder="Buscar jugador..." class="p-2 border rounded text-sm w-full md:w-64 outline-none">
-                <select id="filtroEq" onchange="actualizar()" class="p-2 border rounded font-bold text-sm bg-white cursor-pointer">
-                    <option value="TODOS">Todos los Equipos</option>
-                    <option value="A">Equipo A</option><option value="B">Equipo B</option><option value="C">Equipo C</option>
-                </select>
+        <div class="bg-white rounded-2xl shadow-2xl border-none overflow-hidden">
+            <div class="p-6 bg-slate-50 border-b flex flex-wrap justify-between items-center gap-4">
+                <div class="flex items-center gap-4 w-full md:w-auto">
+                    <div class="bg-blue-900 p-2 rounded-lg shadow-lg">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input type="text" id="buscador" onkeyup="actualizar()" placeholder="Buscar jugador por nombre..." class="bg-transparent border-none focus:ring-0 text-slate-800 font-bold placeholder-slate-400 w-full md:w-64">
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-black text-slate-400 uppercase">Filtrar:</span>
+                    <select id="filtroEq" onchange="actualizar()" class="bg-white border border-slate-200 rounded-lg px-4 py-2 text-xs font-black text-blue-900 shadow-sm outline-none cursor-pointer">
+                        <option value="TODOS">TODOS LOS EQUIPOS</option>
+                        <option value="A">EQUIPO A</option>
+                        <option value="B">EQUIPO B</option>
+                        <option value="C">EQUIPO C</option>
+                    </select>
+                </div>
             </div>
             <div class="table-container">
-                <table class="w-full text-left text-[11px] md:text-xs">
-                    <thead id="head-tabla" class="bg-slate-800 text-white uppercase font-bold"></thead>
-                    <tbody id="body-tabla" class="divide-y text-slate-700"></tbody>
+                <table class="w-full text-left text-xs">
+                    <thead id="head-tabla" class="bg-slate-900 text-slate-300 uppercase font-black tracking-wider"></thead>
+                    <tbody id="body-tabla" class="divide-y divide-slate-100 text-slate-600"></tbody>
                 </table>
             </div>
         </div>
     </main>
 
     <script>
-        // ENLACES CARGADOS
         const URL_STANDING = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTy5EGIBeE8HkatJhMNRmGIMD55niqmhwH4O-0JTf10WjSkclcNSThUHD6KbDsSyvg41mY1B7eMinBG/pub?gid=884290641&single=true&output=csv';
         const URL_BATEO_A  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTy5EGIBeE8HkatJhMNRmGIMD55niqmhwH4O-0JTf10WjSkclcNSThUHD6KbDsSyvg41mY1B7eMinBG/pub?gid=1561811561&single=true&output=csv';
         const URL_BATEO_B  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTy5EGIBeE8HkatJhMNRmGIMD55niqmhwH4O-0JTf10WjSkclcNSThUHD6KbDsSyvg41mY1B7eMinBG/pub?gid=574063817&single=true&output=csv';
@@ -69,8 +93,8 @@
         let vista = 'bateo';
 
         function f(n, esERA = false) {
-            if (n === undefined || n === null || n === "" || n === "0") return 0;
-            let num = parseFloat(n.toString().replace(',', '.').replace('%', '').trim());
+            if (!n || n === "" || n === "0") return 0;
+            let num = parseFloat(n.toString().replace(',', '.').replace('%','').trim());
             if (isNaN(num)) return 0;
             if (esERA) {
                 if (num > 100) num = num / 1000;
@@ -89,23 +113,20 @@
                     fetch(URL_BATEO_C).then(r => r.text()),
                     fetch(URL_PITCHEO).then(r => r.text())
                 ]);
-
                 db.standing = Papa.parse(resS, { header: true, skipEmptyLines: true }).data;
                 db.pitchers = Papa.parse(resP, { header: true, skipEmptyLines: true }).data;
-
                 const jA = Papa.parse(resA, { header: true, skipEmptyLines: true }).data.map(j => ({...j, equipo: 'A'}));
                 const jB = Papa.parse(resB, { header: true, skipEmptyLines: true }).data.map(j => ({...j, equipo: 'B'}));
                 const jC = Papa.parse(resC, { header: true, skipEmptyLines: true }).data.map(j => ({...j, equipo: 'C'}));
-
                 db.jugadores = [...jA, ...jB, ...jC];
                 actualizar();
-            } catch (e) { console.error("Error cargando Google Sheets", e); }
+            } catch (e) { console.error("Error cargando datos", e); }
         }
 
         function cambiarVista(v) {
             vista = v;
-            document.getElementById('btn-bateo').className = v === 'bateo' ? 'flex-1 py-4 font-black tab-active' : 'flex-1 py-4 font-black text-gray-400';
-            document.getElementById('btn-pitcheo').className = v === 'pitcheo' ? 'flex-1 py-4 font-black tab-active' : 'flex-1 py-4 font-black text-gray-400';
+            document.getElementById('btn-bateo').className = v === 'bateo' ? 'flex-1 py-3 rounded-lg text-sm tab-active uppercase' : 'flex-1 py-3 rounded-lg text-sm text-slate-400 font-bold uppercase';
+            document.getElementById('btn-pitcheo').className = v === 'pitcheo' ? 'flex-1 py-3 rounded-lg text-sm tab-active uppercase' : 'flex-1 py-3 rounded-lg text-sm text-slate-400 font-bold uppercase';
             actualizar();
         }
 
@@ -114,10 +135,10 @@
             const busq = document.getElementById('buscador').value.toLowerCase();
             
             document.getElementById('tabla-standing').innerHTML = db.standing.map(s => `
-                <tr class="hover:bg-slate-50 border-b">
-                    <td class="p-3 text-left font-black text-blue-800 italic">${s.Equipo || ""}</td>
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-4 text-left font-black text-blue-900 italic text-base uppercase">${s.Equipo || ""}</td>
                     <td>${f(s.Games)}</td><td>${f(s.Win)}</td><td>${f(s.Loss)}</td><td>${f(s.Tie)}</td>
-                    <td class="text-blue-900 font-black">${f(s.Pts)}</td><td>${f(s['Avg.'])}</td>
+                    <td class="text-blue-600 font-black text-lg">${f(s.Pts)}</td><td>${f(s['Avg.'])}</td>
                 </tr>`).join('');
 
             if(vista === 'bateo') {
@@ -132,47 +153,57 @@
         }
 
         function renderLideresBateo() {
-            const cats = [{n:'AVG', k:'AVG'}, {n:'HR', k:'HR'}, {n:'HITS', k:'HITS'}, {n:'RBI', k:'RBI'}, {n:'RUNS', k:'Runs'}, {n:'OBP%', k:'% OBP'}];
+            const cats = [{n:'PROMEDIO (AVG)', k:'AVG'}, {n:'HOME RUNS', k:'HR'}, {n:'HITS', k:'HITS'}, {n:'IMPULSADAS', k:'RBI'}, {n:'ANOTADAS', k:'Runs'}, {n:'ROBOS', k:'SB'}];
             renderCards(cats, db.jugadores);
         }
 
         function renderLideresPitcheo() {
-            const cats = [{n:'ERA', k:'ERA', rev:true}, {n:'WINS', k:'W'}, {n:'SO (K)', k:'K'}];
+            const cats = [{n:'EFECTIVIDAD', k:'ERA', rev:true}, {n:'VICTORIAS', k:'G'}, {n:'PONCHES (K)', k:'K'}];
             renderCards(cats, db.pitchers);
         }
 
         function renderCards(cats, pool) {
             document.getElementById('lideratos').innerHTML = cats.map(cat => {
-                const tops = [...pool].filter(j => j[cat.k] !== "" && j[cat.k] !== undefined).sort((a,b) => {
+                const tops = [...pool].filter(j => j[cat.k]).sort((a,b) => {
                     let vA = f(a[cat.k], cat.k === 'ERA');
                     let vB = f(b[cat.k], cat.k === 'ERA');
                     return cat.rev ? vA - vB : vB - vA;
                 }).slice(0, 5);
                 return `
-                <div class="bg-white p-3 rounded-lg shadow border-t-2 border-blue-900">
-                    <h4 class="text-[10px] font-black text-blue-900 uppercase mb-2">${cat.n} TOP 5</h4>
-                    ${tops.map((j,i) => `<div class="flex justify-between text-[11px] border-b py-1"><span>${i+1}. ${j.Player || j.Pitcher}</span><span class="font-bold text-blue-600">${f(j[cat.k], cat.k==='ERA')}</span></div>`).join('')}
+                <div class="bg-white p-5 rounded-2xl shadow-lg border-t-8 border-blue-900 card-leader">
+                    <h4 class="text-[10px] font-black text-slate-400 uppercase mb-4 tracking-widest">${cat.n} - TOP 5</h4>
+                    ${tops.map((j,i) => `
+                        <div class="flex justify-between items-center mb-2 last:mb-0">
+                            <span class="text-sm ${i===0?'font-black text-blue-900':'font-bold text-slate-600'} truncate mr-2">${i+1}. ${j.Player || j.Pitcher}</span>
+                            <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-black">${f(j[cat.k], cat.k==='ERA')}</span>
+                        </div>`).join('')}
                 </div>`;
             }).join('');
         }
 
         function renderBateo(l) {
-            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-3">Jugador</th><th>Eq</th><th>VB</th><th class="bg-blue-700 text-white">AVG</th><th class="bg-red-700 text-center text-white">HR</th><th>H</th><th>2B</th><th>3B</th><th>BB</th><th>SO</th><th>R</th><th>RBI</th><th>SB</th><th>OBP%</th></tr>`;
+            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Jugador</th><th>Eq</th><th>VB</th><th class="text-blue-400">AVG</th><th class="text-red-400 text-center font-black">HR</th><th>H</th><th>2B</th><th>3B</th><th>SB</th><th>BB</th><th>R</th><th>RBI</th><th>OBP%</th></tr>`;
             document.getElementById('body-tabla').innerHTML = l.map(j => `
-                <tr class="hover:bg-blue-50 border-b">
-                    <td class="p-3 font-bold">${j.Player}</td><td class="text-center font-bold">${j.equipo}</td><td>${f(j.VB)}</td>
-                    <td class="font-black text-blue-700">${f(j.AVG)}</td><td class="text-center text-red-600 font-black">${f(j.HR)}</td>
-                    <td>${f(j.HITS)}</td><td>${f(j['2B'])}</td><td>${f(j['3B'])}</td><td>${f(j.BB)}</td><td>${f(j.SO)}</td><td>${f(j.Runs)}</td><td>${f(j.RBI)}</td><td>${f(j.SB)}</td><td>${f(j['% OBP'])}</td>
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-4 font-black text-slate-900 uppercase">${j.Player}</td>
+                    <td class="text-center"><span class="bg-slate-100 px-2 py-1 rounded font-bold">${j.equipo}</span></td>
+                    <td class="font-bold">${f(j.VB)}</td>
+                    <td class="font-black text-blue-600 text-sm italic">${f(j.AVG)}</td>
+                    <td class="text-center text-red-600 font-black text-sm">${f(j.HR)}</td>
+                    <td class="font-bold">${f(j.HITS)}</td><td>${f(j['2B'])}</td><td>${f(j['3B'])}</td><td>${f(j.SB)}</td><td>${f(j.BB)}</td><td>${f(j.Runs)}</td><td>${f(j.RBI)}</td><td>${f(j['% OBP'])}</td>
                 </tr>`).join('');
         }
 
         function renderPitcheo(l) {
-            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-3">Lanzador</th><th>Eq</th><th class="bg-blue-700 text-white">ERA</th><th>G</th><th>IP</th><th class="bg-red-700 text-center text-white">K</th><th>WHIP</th><th>BB</th></tr>`;
+            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Lanzador</th><th>Eq</th><th class="text-blue-400">ERA</th><th>G</th><th>IP</th><th class="text-red-400 text-center">K</th><th>WHIP</th><th>BB</th></tr>`;
             document.getElementById('body-tabla').innerHTML = l.map(p => `
-                <tr class="hover:bg-red-50 border-b">
-                    <td class="p-3 font-bold">${p.Pitcher}</td><td class="text-center">${p.Equipo}</td>
-                    <td class="font-black text-blue-700">${f(p.ERA, true)}</td><td>${f(p.G)}</td><td>${f(p.IP)}</td>
-                    <td class="font-black text-red-600 text-center">${f(p.K)}</td><td>${f(p.WHIP)}</td><td>${f(p.BB)}</td>
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-4 font-black text-slate-900 uppercase">${p.Pitcher}</td>
+                    <td class="text-center font-bold">${p.Equipo}</td>
+                    <td class="font-black text-blue-600 text-sm italic">${f(p.ERA, true)}</td>
+                    <td class="font-bold">${f(p.G)}</td><td>${f(p.IP)}</td>
+                    <td class="font-black text-red-600 text-center text-sm">${f(p.K)}</td>
+                    <td>${f(p.WHIP)}</td><td>${f(p.BB)}</td>
                 </tr>`).join('');
         }
 
