@@ -59,12 +59,20 @@
         let db = {};
         let vista = 'bateo';
 
-        // FUNCIÓN CLAVE: Corrige los números como 500.000 o 846.154
-        function f(n) {
+        // FUNCIÓN DE FORMATEO MEJORADA
+        function f(n, esERA = false) {
             if (n === undefined || n === null) return 0;
             let num = parseFloat(n);
-            // Si el número es mayor a 2000 (como 500000), lo dividimos para que sea un AVG normal (500)
-            if (num > 2000) {
+
+            // Si es ERA, queremos 2 decimales (ej: 2.25)
+            if (esERA) {
+                // Si el número viene como entero grande (ej: 2250), lo bajamos a escala decimal
+                if (num > 100) { num = num / 1000; }
+                return num.toFixed(2);
+            }
+
+            // Para los demás, si es un número escalado (ej: 500000), lo bajamos a entero (500)
+            if (num > 2000 && !esERA) {
                 while (num > 1000) { num = num / 10; }
             }
             return Math.round(num);
@@ -75,7 +83,7 @@
                 const r = await fetch('datos_liga.json');
                 db = await r.json();
                 actualizar();
-            } catch (e) { document.body.innerHTML += "<p class='text-red-500 text-center'>Error cargando datos_liga.json. Revisa el nombre del archivo.</p>"; }
+            } catch (e) { console.error("Error al cargar JSON"); }
         }
 
         function cambiarVista(v) {
@@ -89,7 +97,6 @@
             const eq = document.getElementById('filtroEq').value;
             const busq = document.getElementById('buscador').value.toLowerCase();
             
-            // Standing
             document.getElementById('tabla-standing').innerHTML = db.standing.map(s => `
                 <tr class="hover:bg-slate-50 border-b">
                     <td class="p-3 text-blue-800 font-black italic text-base">${s.equipo}</td>
@@ -110,23 +117,28 @@
 
         function renderLideresBateo() {
             const cats = [{n:'AVG', k:'avg'}, {n:'HR', k:'hr'}, {n:'HITS', k:'hits'}, {n:'RBI', k:'rbi'}, {n:'RUNS', k:'runs'}, {n:'BB', k:'bb'}];
-            renderCards(cats, db.jugadores);
+            renderCards(cats, db.jugadores, false);
         }
 
         function renderLideresPitcheo() {
             const cats = [{n:'ERA', k:'era', rev:true}, {n:'WINS', k:'g'}, {n:'K', k:'k'}];
-            renderCards(cats, db.pitchers);
+            renderCards(cats, db.pitchers, true);
         }
 
-        function renderCards(cats, pool) {
+        function renderCards(cats, pool, esPitcheo) {
             document.getElementById('lideratos').innerHTML = cats.map(cat => {
-                const tops = [...pool].sort((a,b) => cat.rev ? f(a[cat.k]) - f(b[cat.k]) : f(b[cat.k]) - f(a[cat.k])).slice(0, 5);
+                const tops = [...pool].sort((a,b) => {
+                    let valA = f(a[cat.k], cat.k === 'era');
+                    let valB = f(b[cat.k], cat.k === 'era');
+                    return cat.rev ? valA - valB : valB - valA;
+                }).slice(0, 5);
+
                 return `
                 <div class="bg-white p-4 rounded-xl shadow border-t-4 border-blue-900">
                     <h4 class="text-xs font-black text-blue-900 uppercase mb-3">${cat.n} TOP 5</h4>
                     ${tops.map((j,i) => `
                         <div class="flex justify-between py-1 border-b text-[11px]">
-                            <span>${i+1}. ${j.nombre}</span><span class="font-bold text-blue-600">${f(j[cat.k])}</span>
+                            <span>${i+1}. ${j.nombre}</span><span class="font-bold text-blue-600">${f(j[cat.k], cat.k === 'era')}</span>
                         </div>`).join('')}
                 </div>`;
             }).join('');
@@ -134,10 +146,10 @@
 
         function renderBateo(l) {
             document.getElementById('head-tabla').innerHTML = `
-                <tr><th class="p-3">Jugador</th><th>Eq</th><th>VB</th><th class="bg-blue-700">AVG</th><th class="bg-red-700 text-center">HR</th><th>H</th><th>2B</th><th>3B</th><th>RBI</th></tr>`;
+                <tr><th class="p-3">Jugador</th><th>Eq</th><th>VB</th><th class="bg-blue-700">AVG</th><th class="bg-red-700 text-center text-white">HR</th><th>H</th><th>2B</th><th>3B</th><th>RBI</th></tr>`;
             document.getElementById('body-tabla').innerHTML = l.map(j => `
                 <tr class="hover:bg-blue-50 border-b font-medium">
-                    <td class="p-3 font-bold">${j.nombre}</td><td class="text-center">${j.equipo}</td><td>${f(j.vb)}</td>
+                    <td class="p-3 font-bold">${j.nombre}</td><td class="text-center font-bold">${j.equipo}</td><td>${f(j.vb)}</td>
                     <td class="font-black text-blue-700">${f(j.avg)}</td><td class="font-black text-center text-red-600">${f(j.hr)}</td>
                     <td>${f(j.hits)}</td><td>${f(j.b2)}</td><td>${f(j.b3)}</td><td>${f(j.rbi)}</td>
                 </tr>`).join('');
@@ -145,11 +157,11 @@
 
         function renderPitcheo(l) {
             document.getElementById('head-tabla').innerHTML = `
-                <tr><th class="p-3">Lanzador</th><th>Eq</th><th class="bg-blue-700">ERA</th><th>G</th><th>IP</th><th class="bg-red-700 text-center">K</th><th>WHIP</th></tr>`;
+                <tr><th class="p-3">Lanzador</th><th>Eq</th><th class="bg-blue-700 text-white">ERA</th><th>G</th><th>IP</th><th class="bg-red-700 text-center text-white">K</th><th>WHIP</th></tr>`;
             document.getElementById('body-tabla').innerHTML = l.map(p => `
                 <tr class="hover:bg-red-50 border-b font-medium">
-                    <td class="p-3 font-bold">${p.nombre}</td><td class="text-center">${p.equipo}</td>
-                    <td class="font-black text-blue-700">${f(p.era)}</td><td>${f(p.g)}</td><td>${f(p.ip)}</td>
+                    <td class="p-3 font-bold">${p.nombre}</td><td class="text-center font-bold">${p.equipo}</td>
+                    <td class="font-black text-blue-700">${f(p.era, true)}</td><td>${f(p.g)}</td><td>${f(p.ip)}</td>
                     <td class="font-black text-red-600 text-center">${f(p.k)}</td><td>${f(p.whip)}</td>
                 </tr>`).join('');
         }
