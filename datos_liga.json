@@ -61,14 +61,15 @@
   ],
   "pitchers": [
     { "nombre": "Angelo Moreno", "equipo": "A", "g": 5, "ip": 20, "era": 2.25, "whip": 47, "k": 15, "bb": 7, "er": 9, "p": 0 },
-    { "nombre": "Antonio Matos", "equipo": "A", "g": 3, "ip": 10, "era": 2.25, "whip": 71, "k": 7, "bb": 5, "er": 21, "p": 1 },
+    { "nombre": "Antonio Matos", "equipo": "A", "g": 1, "ip": 10, "era": 2.25, "whip": 71, "k": 7, "bb": 5, "er": 21, "p": 0 },
+    { "nombre": "Juan Luis Garcia", "equipo": "A", "g": 0, "ip": 3, "era": 25.00, "whip": 2.33, "k": 3, "bb": 7, "er": 15, "p": 1 },
     { "nombre": "Tony Miranda", "equipo": "B", "g": 0, "ip": 9, "era": 15.33, "whip": 2.50, "k": 6, "bb": 15, "er": 23, "p": 2 },
-    { "nombre": "Pavel Pino", "equipo": "B", "g": 1, "ip": 5, "era": 6, "whip": 0, "k": 0, "bb": 2, "er": 6, "p": 0 },
-    { "nombre": "Joe Pichardo", "equipo": "B", "g": 2, "ip": 15, "era": 8.67, "whip": 3.50, "k": 2, "bb": 7, "er": 26, "p": 2 },
+    { "nombre": "Pavel Pino", "equipo": "B", "g": 0, "ip": 5, "era": 6, "whip": 0, "k": 0, "bb": 2, "er": 6, "p": 1 },
+    { "nombre": "Joe Pichardo", "equipo": "B", "g": 2, "ip": 15, "era": 8.67, "whip": 3.50, "k": 2, "bb": 7, "er": 26, "p": 0 },
     { "nombre": "Noel Parra", "equipo": "C", "g": 0, "ip": 9, "era": 13.33, "whip": 2.50, "k": 1, "bb": 8, "er": 24, "p": 2 },
     { "nombre": "Pedro Matos", "equipo": "C", "g": 0, "ip": 5, "era": 12, "whip": 2, "k": 3, "bb": 6, "er": 12, "p": 1 },
-    { "nombre": "Luis Diaz Sr", "equipo": "C", "g": 2, "ip": 10, "era": 5.50, "whip": 3, "k": 3, "bb": 9, "er": 11, "p": 1 },
-    { "nombre": "Solin Santos", "equipo": "C", "g": 1, "ip": 4, "era": 11.25, "whip": 0, "k": 2, "bb": 0, "er": 9, "p": 1 },
-    { "nombre": "Ramon Matos", "equipo": "C", "g": 1, "ip": 5, "era": 3, "whip": 4, "k": 2, "bb": 8, "er": 3, "p": 1 }
+    { "nombre": "Luis Diaz Sr", "equipo": "C", "g": 1, "ip": 10, "era": 5.50, "whip": 3, "k": 3, "bb": 9, "er": 11, "p": 1 },
+    { "nombre": "Solin Santos", "equipo": "C", "g": 1, "ip": 4, "era": 11.25, "whip": 0, "k": 2, "bb": 0, "er": 9, "p": 0 },
+    { "nombre": "Ramon Matos", "equipo": "C", "g": 0, "ip": 5, "era": 3, "whip": 4, "k": 2, "bb": 8, "er": 3, "p": 1 }
   ]
 }
