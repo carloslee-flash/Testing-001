@@ -197,14 +197,14 @@
         }
 
         function renderBateo(l) {
-            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Jugador</th><th>Eq</th><th>TO</th><th>VB</th><th class="bg-blue-600 text-white">AVG</th><th>SLG</th><th>H</th><th>1B</th><th>2B</th><th>3B</th><th class="text-red-600">HR</th><th>RBI</th><th>R</th><th>BB</th><th>SO</th><th>SB</th></tr>`;
+            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Jugador</th><th>Eq</th><th>TO</th><th>VB</th><th class="bg-blue-600 text-white">AVG</th><!--<th>SLG</th>--><th>H</th><th>1B</th><th>2B</th><th>3B</th><th class="text-red-600">HR</th><th>RBI</th><th>R</th><th>BB</th><th>SO</th><th>SB</th></tr>`;
             document.getElementById('body-tabla').innerHTML = l.map(j => `
                 <tr class="hover:bg-blue-50 border-b border-slate-50">
                     <td class="p-4 font-black text-slate-900 uppercase italic leading-tight">${j.Player}</td>
                     <td class="text-center font-bold text-slate-400 text-[10px]">${j.equipo}</td>
                     <td>${f(j.TO)}</td><td>${f(j.VB)}</td>
                     <td class="font-black text-blue-700 bg-blue-50 text-xs">${f(j.AVG, true)}</td>
-                    <td class="font-bold text-slate-400">${f(j.SLG, true)}</td>
+                    <!--<td class="font-bold text-slate-400">${f(j.SLG, true)}</td>-->
                     <td class="font-black">${f(j.HITS)}</td><td>${f(j['1B'])}</td><td>${f(j['2B'])}</td><td>${f(j['3B'])}</td>
                     <td class="text-red-600 font-black">${f(j.HR)}</td><td class="font-black text-slate-800">${f(j.RBI)}</td>
                     <td>${f(j.Runs)}</td><td>${f(j.BB)}</td><td class="text-slate-300">${f(j.SO)}</td><td class="text-green-600 font-bold">${f(j.SB)}</td>
