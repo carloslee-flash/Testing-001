@@ -31,7 +31,7 @@
             <div class="table-container">
                 <table class="w-full text-center text-sm font-bold">
                     <thead class="bg-slate-50 text-slate-400 uppercase text-[10px]">
-                        <tr><th class="p-4 text-left">Equipo</th><th>JJ</th><th>JG</th><th>JP</th><th>JE</th><th class="text-blue-600">PTS</th><th>AVG</th></tr>
+                        <tr><th class="p-4 text-left">Equipo</th><th>JJ</th><th>JG</th><th>JP</th><th>JE</th><th>Dif</th><th class="text-blue-600">PTS</th><th>AVG</th></tr>
                     </thead>
                     <tbody id="tabla-standing" class="divide-y divide-slate-100"></tbody>
                 </table>
@@ -116,7 +116,7 @@
             document.getElementById('tabla-standing').innerHTML = db.standing.map(s => `
                 <tr class="hover:bg-slate-50 border-b">
                     <td class="p-4 text-left font-black text-blue-900 italic uppercase">${s.Equipo || ""}</td>
-                    <td>${f(s.Games)}</td><td>${f(s.Win)}</td><td>${f(s.Loss)}</td><td>${f(s.Tie)}</td>
+                    <td>${f(s.Games)}</td><td>${f(s.Win)}</td><td>${f(s.Loss)}</td><td>${f(s.Tie)}</td><td>${f(s.Dif)}</td>
                     <td class="text-blue-600 font-black text-lg">${f(s.Pts)}</td><td>${f(s['Avg.'], true)}</td>
                 </tr>`).join('');
 
