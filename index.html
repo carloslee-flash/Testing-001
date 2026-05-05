@@ -147,7 +147,7 @@
                   ]
                 : [
                     {n:'EFECTIVIDAD', k:'ERA', e:true, rev:true}, 
-                    {n:'VICTORIAS', k:'G'}, 
+                    {n:'VICTORIAS', k:'W'}, 
                     {n:'PONCHES', k:'K'}
                   ];
             
@@ -212,7 +212,7 @@
         }
 
         function renderPitcheo(l) {
-            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Lanzador</th><th>Eq</th><th class="bg-blue-600 text-white">ERA</th><th>G</th><th>IP</th><th class="bg-red-600 text-white">K</th><th>WHIP</th><th>BB</th></tr>`;
+            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Lanzador</th><th>Eq</th><th class="bg-blue-600 text-white">ERA</th><th>G</th><th>W</th><th>L</th><th>IP</th><th class="bg-red-600 text-white">K</th><th>WHIP</th><th>BB</th></tr>`;
             document.getElementById('body-tabla').innerHTML = l.map(p => `
                 <tr class="hover:bg-red-50 border-b border-slate-50">
                     <td class="p-4 font-black text-slate-900 uppercase italic">${p.Pitcher}</td>
