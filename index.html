@@ -212,13 +212,13 @@
         }
 
         function renderPitcheo(l) {
-            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Lanzador</th><th>Eq</th><th class="bg-blue-600 text-white">ERA</th><th>W</th><th>IP</th><th class="bg-red-600 text-white">K</th><th>WHIP</th><th>BB</th></tr>`;
+            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Lanzador</th><th>Eq</th><th class="bg-blue-600 text-white">ERA</th><th>W</th><th>L</th><th>IP</th><th class="bg-red-600 text-white">K</th><th>WHIP</th><th>BB</th></tr>`;
             document.getElementById('body-tabla').innerHTML = l.map(p => `
                 <tr class="hover:bg-red-50 border-b border-slate-50">
                     <td class="p-4 font-black text-slate-900 uppercase italic">${p.Pitcher}</td>
                     <td class="text-center font-bold text-slate-400 text-[10px]">${p.Equipo}</td>
                     <td class="font-black text-blue-700 bg-blue-50 text-xs">${f(p.ERA, false, true)}</td>
-                    <td>${f(p.W)}</td><td>${f(p.IP)}</td>
+                    <td>${f(p.W)}</td><td>${f(p.L)}</td><td>${f(p.IP)}</td>
                     <td class="font-black text-red-600 bg-red-50 text-center">${f(p.K)}</td>
                     <td>${f(p.WHIP)}</td><td>${f(p.BB)}</td>
                 </tr>`).join('');
