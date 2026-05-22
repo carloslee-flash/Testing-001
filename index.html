@@ -197,7 +197,7 @@
         }
 
         function renderBateo(l) {
-            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Jugador</th><th>Eq</th><th>TO</th><th>VB</th><th class="bg-blue-600 text-white">AVG</th><!--<th>SLG</th>--><th>H</th><th>1B</th><th>2B</th><th>3B</th><th class="text-red-600">HR</th><th>RBI</th><th>R</th><th>BB</th><th>SO</th><th>SB</th></tr>`;
+            document.getElementById('head-tabla').innerHTML = `<tr><th class="p-4">Jugador</th><th>Eq</th><th>VB</th><th>TO</th><th class="bg-blue-600 text-white">AVG</th><!--<th>SLG</th>--><th>H</th><th>1B</th><th>2B</th><th>3B</th><th class="text-red-600">HR</th><th>RBI</th><th>R</th><th>BB</th><th>SO</th><th>SB</th></tr>`;
             document.getElementById('body-tabla').innerHTML = l.map(j => `
                 <tr class="hover:bg-blue-50 border-b border-slate-50">
                     <td class="p-4 font-black text-slate-900 uppercase italic leading-tight">${j.Player}</td>
