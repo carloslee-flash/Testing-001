@@ -31,7 +31,7 @@
             <div class="table-container">
                 <table class="w-full text-center text-sm font-bold">
                     <thead class="bg-slate-50 text-slate-400 uppercase text-[10px]">
-                        <tr><th class="p-4 text-left">Equipo</th><th>JJ</th><th>JG</th><th>JP</th><th>JE</th><th>Dif</th><th class="text-blue-600">PTS</th><th>AVG</th></tr>
+                        <tr><th class="p-4 text-left">Equipo</th><th>JJ</th><th>JG</th><th>JP</th><th>JE</th><th>DIF</th><th class="text-blue-600">PTS</th><th>AVG</th></tr>
                     </thead>
                     <tbody id="tabla-standing" class="divide-y divide-slate-100"></tbody>
                 </table>
@@ -74,13 +74,20 @@
         let db = { standing: [], jugadores: [], pitchers: [] };
         let vista = 'bateo';
 
-        function f(n, d = false, e = false) {
-            if (!n || n === "" || n === "0") return 0;
-            let num = parseFloat(n.toString().replace(',', '.').replace('%', '').trim());
-            if (isNaN(num)) return 0;
-            if (e) return num > 100 ? (num/1000).toFixed(2) : num.toFixed(2);
-            if (d && num > 0 && num < 2) return Math.round(num * 1000);
-            return Math.round(num);
+function f(n, d = false, e = false) {
+    if (n === undefined || n === null || n === "" || n === "0") return 0;
+    let num = parseFloat(n.toString().replace(',', '.').replace('%', '').trim());
+    if (isNaN(num)) return 0;
+    
+    if (e) return num > 100 ? (num/1000).toFixed(2) : num.toFixed(2);
+    
+    // Si d es true, permite decimales (para AVG, SLG o Juegos de Diferencia tipo 3.5)
+    if (d) {
+        if (num > 0 && num < 2) return Math.round(num * 1000); // Para AVG (.350 -> 350)
+        return num % 1 === 0 ? Math.round(num) : num.toFixed(1); // Si tiene decimales (ej 3.5) lo deja con 1 decimal
+    }
+    
+    return Math.round(num);
         }
 
         function getFotoURL(nombre) {
@@ -116,7 +123,7 @@
             document.getElementById('tabla-standing').innerHTML = db.standing.map(s => `
                 <tr class="hover:bg-slate-50 border-b">
                     <td class="p-4 text-left font-black text-blue-900 italic uppercase">${s.Equipo || ""}</td>
-                    <td>${f(s.Games)}</td><td>${f(s.Win)}</td><td>${f(s.Loss)}</td><td>${f(s.Tie)}</td><td>${f(s.Dif)}</td>
+                    <td>${f(s.Games)}</td><td>${f(s.Win)}</td><td>${f(s.Loss)}</td><td>${f(s.Tie)}</td><td class="font-bold text-slate-500">${f(s.DIF || s.GB || s.Diff, true)}</td>
                     <td class="text-blue-600 font-black text-lg">${f(s.Pts)}</td><td>${f(s['Avg.'], true)}</td>
                 </tr>`).join('');
 
